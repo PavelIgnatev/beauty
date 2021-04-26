@@ -1,0 +1,28 @@
+<template>
+  <div id="app">
+    {{ text }}
+    <vue-dadata
+      placeholder="Город"
+      query="number"
+      autoload="true"
+      v-model="text"
+      token="8e14d61356368799079f0d7faf37b4cef48ace2a"
+    ></vue-dadata>
+  </div>
+</template>
+
+<script>
+import VueDadata from "vue-dadata";
+
+export default {
+  name: "VueDadataTest",
+  data() {
+    return {
+      text: "",
+    };
+  },
+  components: {
+    "vue-dadata": VueDadata,
+  },
+};
+</script>

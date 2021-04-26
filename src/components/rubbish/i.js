@@ -1,10 +1,9 @@
 import Vue from "vue";
 import YmapPlugin from "vue-yandex-maps";
-import VueLocalStorage from "vue-localstorage";
 import router from "./router";
 import store from "./store";
 import App from "./App.vue";
-import "@/style/style.sass";
+
 Vue.config.productionTip = false;
 
 const settings = {
@@ -15,7 +14,7 @@ const settings = {
 };
 
 Vue.use(YmapPlugin, settings);
-Vue.use(VueLocalStorage);
+
 new Vue({
   el: "#app",
   router,
