@@ -1,48 +1,32 @@
 <template>
   <div class="main-page">
     <section class="main-page__selection">
-      <Deskbar></Deskbar>
+      <DeskBar></DeskBar>
       <div class="main-page__selection_heading">
         Мы за удобство <br />
         красоту и здоровье
       </div>
     </section>
     <section class="main-page__information">
-      <BlockInformation
-        name="Владеете салоном, 
-        но всё ещё не с нами?"
-        description="Наша задача - не только упростить жизнь каждому, кто захочет посетить салон красоты, но и поддержать исполнителей данных услуг"
-        btntext="Узнать подробнее"
-        source="bg-salon.png"
-      ></BlockInformation>
-      <BlockInformation
-        name="Новинки моды 2021"
-        description="Новинки мировой индустрии красоты, которые вызывали наибольший отклик у людей в этом году! 
-        Вперёд к трендам!"
-        btntext="Мне интересно"
-        source="bg-moda.png"
-      ></BlockInformation>
+      <BlogCardPost
+        v-for="data in this.$store.state.BasicData.MainPageBlogCardPost"
+        :key="data.name"
+        :name="data.name"
+        :description="data.description"
+        :btntext="data.btntext"
+        :source="data.source"
+      ></BlogCardPost>
     </section>
     <section class="main-page__advantages">
       <div class="main-page__title">Преимущества, которыми мы гордимся:</div>
       <div class="main-page__advantages_wrap">
-        <Advantages
-          source="price.svg"
-          title="Умные цены"
-          subtitle="Мы стараемся делать
-      сервис доступным для всех"
-        ></Advantages>
-        <Advantages
-          source="bron.svg"
-          title="Бронируй 24/7"
-          subtitle="Занимайте свободные записи
-        в удобное для вас время"
-        ></Advantages>
-        <Advantages
-          source="globus.svg"
-          title="Широкий выбор"
-          subtitle="С нами сотрудничают более 1000 салонов красоты"
-        ></Advantages>
+        <base-advantages
+          v-for="advantages in $store.state.BasicData.BaseAdvantages"
+          :key="advantages.title"
+          :source="advantages.source"
+          :title="advantages.title"
+          :subtitle="advantages.subtitle"
+        ></base-advantages>
       </div>
     </section>
     <section class="main-page__cooperation">
@@ -60,12 +44,16 @@
   </div>
 </template>
 <script>
-import Advantages from "../components/module/advantages";
-import BlockInformation from "../components/module/block-information";
-import Deskbar from "../components/module/deskbar";
+import BaseAdvantages from "../components/single-file/base-advantages.vue";
+import BlogCardPost from "../components/blog/BlogCardPost.vue";
+import DeskBar from "../models/DeskBar";
 export default {
   name: "MainPage",
-  components: { Deskbar, BlockInformation, Advantages },
+  components: {
+    DeskBar,
+    BlogCardPost,
+    "base-advantages": BaseAdvantages,
+  },
 };
 </script>
 <style lang="sass">

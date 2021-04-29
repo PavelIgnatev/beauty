@@ -2,9 +2,9 @@
   <div class="deskbar">
     <div class="deskbar__selection">
       <div
-        class="deskbar__essence"
-        @click="changeDeskbarActive(true)"
-        :class="{ deskbar__inactive: !active }"
+        class="deskbar__request"
+        @click="changeDeskbarIsActive(true)"
+        :class="{ deskbar__inactive: !isActiveTab }"
       >
         <img
           src="@/assets/img/icons/bookmark.svg"
@@ -14,9 +14,9 @@
         <div class="deskbar__descr deskbar__descr_1">Бронь услуги</div>
       </div>
       <div
-        class="deskbar__essence"
-        @click="changeDeskbarActive(false)"
-        :class="{ deskbar__inactive: active }"
+        class="deskbar__request"
+        @click="changeDeskbarIsActive(false)"
+        :class="{ deskbar__inactive: isActiveTab }"
       >
         <img
           src="@/assets/img/icons/home.svg"
@@ -27,15 +27,15 @@
       </div>
     </div>
     <transition name="fade" mode="out-in">
-      <div class="deskbar__wrapper" v-if="active" key="deskbar__wrapper_1">
+      <div class="deskbar__wrapper" v-if="isActiveTab" key="deskbar__wrapper_1">
         <div class="deskbar__input">
           <input
             type="text"
             class="deskbar__service"
             v-model="service"
-            @input="activeService = true"
-            @click="activeService = true"
-            v-click-outside="hideActiveService"
+            @input="activeModalWindowService = true"
+            @click="activeModalWindowService = true"
+            v-click-outside="hideActiveModalWindowService"
             placeholder="Какая услуга вам нужна?"
           />
           <div
@@ -44,19 +44,20 @@
             @click="clearService"
           ></div>
           <select
-            @change="onChangeSelect($event)"
+            @change="onChangeSelectService($event)"
             class="deskbar__select"
-            v-if="activeService"
+            v-if="activeModalWindowService"
             multiple
           >
             <option
-              :value="essence"
-              :key="essence + essence"
-              v-for="essence in popularService"
+              :value="request"
+              :key="request"
+              v-for="request in $store.state.BasicData
+                .PopularQueriesDeskbarInput"
               class="deskbar__option"
-              :class="{ deskbar__option_active: essence == service }"
+              :class="{ deskbar__option_active: request == service }"
             >
-              {{ essence }}
+              {{ request }}
             </option>
           </select>
         </div>
@@ -64,25 +65,20 @@
           <vue-dadata
             :model.sync="city"
             placeholder="Выберите ваш населённый пункт"
-            classes="deskbar__point"
-            :query="getquery()"
+            classes="deskbar__city"
+            :query="query"
             :onChange="selectSuggestion"
-            highlightClassName="deskbar__point_text"
+            highlightClassName="deskbar__city_text"
             token="8e14d61356368799079f0d7faf37b4cef48ace2a"
           ></vue-dadata>
-          <div
-            class="deskbar__input_exit"
-            v-if="point"
-            @click.stop="clearPoint"
-          ></div>
         </div>
         <div class="deskbar__input">
           <date-pick
             class="deskbar__date"
             value="Когда вам будет удобно?"
-            v-model="dateCalendar"
+            v-model="recordingDate"
           ></date-pick>
-          <div class="deskbar__input_exit" v-if="dateCalendar"></div>
+          <div class="deskbar__input_exit" v-if="recordingDate"></div>
         </div>
       </div>
       <div class="deskbar__wrapper" key="deskbar__wrapper_2" v-else>
@@ -91,7 +87,7 @@
             type="text"
             class="deskbar__name"
             placeholder="Введите название салона"
-            v-model="name"
+            v-model="salonName"
           />
           <div class="deskbar__input_exit"></div>
         </div>
@@ -109,64 +105,46 @@ export default {
   name: "deskbar",
   data() {
     return {
-      active: true,
-      service: "",
-      activeService: false,
-      activeServicePoint: false,
-      point: "",
-      date: "",
+      isActiveTab: true,
+      service: this.$localStorage.get("service") ?? "",
+      query: this.$localStorage.get("city") ?? "",
+      activeModalWindowService: false,
       city: "",
-      name: "",
-      popularService: [
-        "Популярные запросы",
-        "Волосы",
-        "Депиляция",
-        "Массаж",
-        "Ногти",
-        "Лицо",
-        "Тело",
-        "Мужчинам",
-      ],
-      dateCalendar: ``,
+      cityCoords: [55.7540471, 37.620405], //Координаты города Москва
+      salonName: "",
+      recordingDate: "",
     };
-  },
-  created() {
-    this.service = this.$localStorage.get("service") ?? "";
-    !this.$localStorage.get("userhasbannedgeo")
-      ? this.$localStorage.set("userhasbannedgeo", "false")
-      : "";
   },
   methods: {
     clearService() {
       this.service = "";
     },
-    hideActiveService() {
-      this.activeService = false;
+    hideActiveModalWindowService() {
+      this.activeModalWindowService = false;
     },
-    changeDeskbarActive(v) {
-      this.active = v;
+    changeDeskbarIsActive(v) {
+      this.isActiveTab = v;
     },
-    onChangeSelect(e) {
+    onChangeSelectService(e) {
       this.service = e.target.value;
     },
     selectSuggestion(suggestion) {
-      this.$localStorage.set("city", suggestion.value);
-      this.$localStorage.set("coords", [
-        suggestion.data.geo_lat,
-        suggestion.data.geo_lon,
-      ]);
-    },
-    getquery() {
-      return this.$localStorage.get("city") ?? "";
+      this.city = suggestion.value;
+      this.cityCoords = [suggestion.data.geo_lat, suggestion.data.geo_lon];
     },
   },
   watch: {
     service(v) {
       this.$localStorage.set("service", v);
     },
-    active() {
-      this.hideActiveServicePoint();
-      this.hideActiveService();
+    isActiveTab() {
+      this.hideActiveModalWindowService();
+    },
+    city(value) {
+      this.$localStorage.set("city", value);
+    },
+    cityCoords(value) {
+      this.$localStorage.set("cityCoords", value);
     },
   },
   directives: {
@@ -345,7 +323,7 @@ export default {
         width: 100%
         font-size: 14px
         position: relative
-        .deskbar__date, .deskbar__point, .deskbar__service, .deskbar__name
+        .deskbar__date, .deskbar__city, .deskbar__service, .deskbar__name
           box-sizing: border-box
           width: calc(100% - 12px)
           color: #1d1d1d
@@ -358,7 +336,7 @@ export default {
           &::placeholder
             color: #1d1d1d
             font-size: 14px
-        .deskbar__point
+        .deskbar__city
           &_text
             background: rgba(0,0,0,0)
             color: #1d1d1d
@@ -465,17 +443,17 @@ export default {
             width: 16px
             height: 16px
             background-size: 16px 16px
-            background-image: url('../../assets/img/icons/search.svg')
+            background-image: url('../assets/img/icons/search.svg')
         &:nth-child(2)
           &::before
-            background-image: url('../../assets/img/icons/place.svg')
+            background-image: url('../assets/img/icons/place.svg')
         &:nth-child(3)
           &::before
             left: 14px
             width: 16px
             height: 16px
             background-size: 16px 16px
-            background-image: url('../../assets/img/icons/calendar.svg')
+            background-image: url('../assets/img/icons/calendar.svg')
         &_exit
           position: absolute
           top: 50%
@@ -505,7 +483,7 @@ export default {
   &__selection
     display: flex
     margin-bottom: 10px
-  &__essence
+  &__request
     cursor: pointer
     width: 50%
     text-align: center

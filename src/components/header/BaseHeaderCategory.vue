@@ -1,11 +1,11 @@
 <template>
-  <div class="base-header__essence" :class="{ 'base-header__active': active }">
-    {{ essence.name }}
+  <div class="base-header__category" :class="{ 'base-header__active': active }">
+    {{ HeaderCategory.name }}
     <transition name="fade">
       <div class="base-header__list_link" v-if="active">
         <div class="base-header__list_wrapper">
           <router-link
-            v-for="(item, index) in essence.structure"
+            v-for="(item, index) in HeaderCategory.value"
             :to="item.toNext"
             :key="index"
             class="base-header__link"
@@ -18,8 +18,8 @@
 </template>
 <script>
 export default {
-  name: "BaseHeaderEssence",
-  props: ["essence"],
+  name: "BaseHeaderCategory",
+  props: { HeaderCategory: Object },
   data() {
     return {
       active: false,
@@ -31,7 +31,7 @@ export default {
 .base-header
   &__active
     color: $palette-orange
-  &__essence
+  &__HeaderCategory
     text-align: center
     height: 50px
     display: flex
@@ -61,11 +61,13 @@ export default {
     color: $palette-white
     text-align: left
     height: 20px
+    cursor: pointer
   &__list_wrapper
     display: flex
     flex-direction: column
     justify-content: space-between
-
+  &__category
+    cursor: pointer
 .fade-enter-active, .fade-leave-active
   transition: opacity .5s ease-in-out
 .fade-enter, .fade-leave-to

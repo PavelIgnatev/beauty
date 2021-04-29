@@ -1,13 +1,13 @@
 <template>
   <header class="base-header">
     <div class="base-header__wrapper">
-      <div class="base-header__name">comfortreat</div>
+      <div class="base-header__name"><p>comfortreat</p></div>
       <nav class="base-header__nav">
-        <BaseHeaderEssence
-          v-for="essence in entities"
-          :key="essence.name"
-          :essence="essence"
-        ></BaseHeaderEssence>
+        <BaseHeaderCategory
+          v-for="category in $store.state.BasicData.BaseHeaderCategories"
+          :key="category.name"
+          :header-category="category"
+        ></BaseHeaderCategory>
       </nav>
       <router-link to="/login" class="base-header__login"
         ><img
@@ -21,96 +21,10 @@
   </header>
 </template>
 <script>
-import BaseHeaderEssence from "./BaseHeaderEssence";
+import BaseHeaderCategory from "./BaseHeaderCategory.vue";
 export default {
   name: "BaseHeader",
-  data() {
-    return {
-      entities: [
-        {
-          name: "Волосы",
-          structure: [
-            { name: "Наращивание", toNext: "/next" },
-            { name: "Наращивание", toNext: "/next" },
-            { name: "Наращивание", toNext: "/next" },
-            { name: "Наращивание", toNext: "/next" },
-            { name: "Наращивание", toNext: "/next" },
-          ],
-        },
-        {
-          name: "Депиляция",
-          structure: [
-            { name: "Депиляция", toNext: "/next" },
-            { name: "Депиляция", toNext: "/next" },
-            { name: "Депиляция", toNext: "/next" },
-            { name: "Депиляция", toNext: "/next" },
-            { name: "Депиляция", toNext: "/next" },
-          ],
-        },
-        {
-          name: "Массаж",
-          structure: [
-            { name: "Массаж", toNext: "/next" },
-            { name: "Массаж", toNext: "/next" },
-            { name: "Массаж", toNext: "/next" },
-            { name: "Массаж", toNext: "/next" },
-            { name: "Массаж", toNext: "/next" },
-          ],
-        },
-        {
-          name: "Ногти",
-          structure: [
-            { name: "Ногти", toNext: "/next" },
-            { name: "Ногти", toNext: "/next" },
-            { name: "Ногти", toNext: "/next" },
-            { name: "Ногти", toNext: "/next" },
-            { name: "Ногти", toNext: "/next" },
-          ],
-        },
-        {
-          name: "Лицо",
-          structure: [
-            { name: "Лицо", toNext: "/next" },
-            { name: "Лицо", toNext: "/next" },
-            { name: "Лицо", toNext: "/next" },
-            { name: "Лицо", toNext: "/next" },
-            { name: "Лицо", toNext: "/next" },
-          ],
-        },
-        {
-          name: "Тело",
-          structure: [
-            { name: "Тело", toNext: "/next" },
-            { name: "Тело", toNext: "/next" },
-            { name: "Тело", toNext: "/next" },
-            { name: "Тело", toNext: "/next" },
-            { name: "Тело", toNext: "/next" },
-          ],
-        },
-        {
-          name: "Мужчинам",
-          structure: [
-            { name: "Мужчинам", toNext: "/next" },
-            { name: "Мужчинам", toNext: "/next" },
-            { name: "Мужчинам", toNext: "/next" },
-            { name: "Мужчинам", toNext: "/next" },
-            { name: "Мужчинам", toNext: "/next" },
-          ],
-        },
-        {
-          name: "Блог",
-          structure: [
-            { name: "Мужчинам", toNext: "/next" },
-            { name: "Мужчинам", toNext: "/next" },
-            { name: "Мужчинам", toNext: "/next" },
-            { name: "Мужчинам", toNext: "/next" },
-            { name: "Мужчинам", toNext: "/next" },
-          ],
-        },
-      ],
-    };
-  },
-  components: { BaseHeaderEssence },
+  components: { BaseHeaderCategory },
 };
 </script>
 <style lang="sass">
@@ -123,13 +37,20 @@ export default {
     display: flex
     height: 100%
   &__name
-    font-family: 'Musket' !important
-    color: $palette-red
-    font-size: 24px
     display: flex
     height: 50px
-    display: flex
     align-items: center
+    font-family: 'Musket'
+    color: $palette-red
+    font-size: 24px
+    p
+      display: flex
+      align-items: center
+      margin: 0
+      font-family: 'Musket'
+      color: $palette-red
+      font-size: 24px
+      margin-top: 2px
   &__nav
     flex: 1
     display: flex

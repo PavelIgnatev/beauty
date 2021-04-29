@@ -2,9 +2,9 @@
   <footer class="base-footer">
     <div class="base-footer__category">
       <BaseFooterCategory
-        v-for="categories in cat"
-        :key="categories.name"
-        :categories="categories"
+        v-for="category in $store.state.BasicData.BaseFooterCategories"
+        :key="category.name"
+        :footer-category="category"
       ></BaseFooterCategory>
     </div>
     <div class="base-footer__foot">
@@ -31,46 +31,10 @@
   </footer>
 </template>
 <script>
-import BaseFooterCategory from "./BaseFooterCategory";
+import BaseFooterCategory from "./BaseFooterCategory.vue";
 export default {
   name: "BaseFooter",
   components: { BaseFooterCategory },
-  data() {
-    return {
-      cat: [
-        {
-          name: "Контакты",
-          value: [
-            { name: "Центр поддержки", href: "" },
-            { name: "Связь с нами", href: "" },
-          ],
-        },
-        {
-          name: "Услуги для клиентов",
-          value: [
-            { name: "Забронировать место в салоне", href: "" },
-            { name: "Статьи о здоровье и красоте", href: "" },
-            { name: "Рекомендовать салон", href: "" },
-          ],
-        },
-        {
-          name: "Партнёрство",
-          value: [
-            { name: "Начать сотрудничать", href: "" },
-            { name: "Список наших партнёров", href: "" },
-            { name: "Справка партнёрства", href: "" },
-          ],
-        },
-        {
-          name: "Компания",
-          value: [
-            { name: "О нас", href: "" },
-            { name: "Пользовательское соглашение", href: "" },
-          ],
-        },
-      ],
-    };
-  },
 };
 </script>
 <style lang="sass">
@@ -93,6 +57,7 @@ export default {
     font-size: 17px
     font-weight: 600
     a
+      padding: 5px 0
       font-weight: 400
       font-size: 14px
       color: rgba(255,255,255, 0.8)

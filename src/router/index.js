@@ -6,8 +6,8 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "PageLanding",
-    component: () => import("@/pages/PageLanding.vue"),
+    name: "LandingPage",
+    component: () => import("@/pages/LandingPage.vue"),
   },
 ];
 

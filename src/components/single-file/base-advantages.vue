@@ -16,7 +16,7 @@
 <script>
 export default {
   name: "advantages",
-  props: ["source", "title", "subtitle"],
+  props: { source: String, title: String, subtitle: String },
 };
 </script>
 <style lang="sass">

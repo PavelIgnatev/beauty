@@ -1,30 +1,30 @@
 <template>
   <div class="footer-category">
-    <div class="footer-category__title">{{ categories.name }}</div>
+    <div class="footer-category__title">{{ FooterCategory.name }}</div>
     <div class="footer-category__wrapper">
       <router-link
         class="footer-category__essence"
-        v-for="essence in categories.value"
-        :key="essence.name"
-        :to="essence.href"
+        v-for="item in FooterCategory.value"
+        :key="item.name"
+        :to="item.href"
       >
-        {{ essence.name }}
+        {{ item.name }}
       </router-link>
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: "FooterCategory",
-  props: ["categories"],
+  name: "BaseFooterCategory",
+  props: { FooterCategory: Object },
 };
 </script>
 <style lang="sass">
 .footer-category
-    &__wrapper
-        display: flex
-        flex-direction: column
-        margin-top: 5px
+  &__wrapper
+    display: flex
+    flex-direction: column
+    margin-top: 5px
     &__essence
-        padding: 5px 0
+      padding: 5px 0
 </style>
