@@ -1,13 +1,13 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-
+import LandingPage from "@/pages/LandingPage.vue";
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
     name: "LandingPage",
-    component: () => import("@/pages/LandingPage.vue"),
+    component: LandingPage,
   },
 ];
 

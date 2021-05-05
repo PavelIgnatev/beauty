@@ -111,5 +111,5 @@ export default {
       box-sizing: border-box
       height: 180px
       width: 100%
-      background: url(../assets/img/backrounds/cooperation.png) center center/cover no-repeat
+      background: url(../assets/img/backrounds/bg-cooperation.png) center center/cover no-repeat
 </style>
