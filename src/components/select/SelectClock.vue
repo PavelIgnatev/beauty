@@ -227,6 +227,16 @@ export default {
       from: "00:00",
       to: "24:00",
       recordingDate: "",
+      today: `${("0" + Number(new Date().getDate())).slice(-2)}/${(
+        "0" + Number(new Date().getMonth() + 1)
+      ).slice(-2)}/${new Date().getFullYear()}`,
+      tomorrow: `${("0" + Number(new Date().getDate() + 1)).slice(-2)}/${(
+        "0" + Number(new Date().getMonth() + 1)
+      ).slice(-2)}/${new Date().getFullYear()}`,
+      fullDay: "",
+      clock: this.$localStorage.get("clock")
+        ? this.$localStorage.get("clock").split(" ")[0]
+        : "",
     };
   },
   created() {
@@ -440,7 +450,7 @@ export default {
         label
           position: absolute
           font-size: 14px
-          top: -18px
+          top: -20px
         &:nth-child(2)
           input
             margin-left: auto
@@ -492,7 +502,8 @@ export default {
         border-radius: 4px
         height: 40px
         width: 48%
-        border: 2px solid rgba(0,110,70, .9)
+        color: #2d2d2d
+        border: 2px solid #9d9d9d
         margin-bottom: 10px
         transition: all .2s ease-in-out
         &:hover

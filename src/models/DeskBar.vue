@@ -81,7 +81,7 @@ export default {
     position: absolute
     box-sizing: border-box
     padding-bottom: 2px
-    bottom: 25px
+    bottom: 20px
     width: calc(100% - 40px)
     left: 20px
     background: $palette-green

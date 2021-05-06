@@ -1,7 +1,9 @@
 <template>
   <header class="base-header">
     <div class="base-header__wrapper">
-      <div class="base-header__name"><p>comfortreat</p></div>
+      <router-link to="/" class="base-header__name base-header__link"
+        ><p>comfortreat</p></router-link
+      >
       <nav class="base-header__nav">
         <BaseHeaderCategory
           v-for="category in $store.state.BasicData.BaseHeaderCategories"
@@ -52,8 +54,10 @@ export default {
       font-size: 24px
       margin-top: 2px
   &__nav
+    height: 100%
     flex: 1
     display: flex
+    align-items: center
     justify-content: space-around
     padding: 0 15px
     font-weight: 100
