@@ -24,7 +24,11 @@
       "
       @click="clearClock"
     ></div>
-    <div class="select-clock" v-if="activeModalWindowDate">
+    <div
+      class="select-clock"
+      v-if="activeModalWindowDate"
+      :style="{ minHeight: activeChooseDate ? '360px' : '320px' }"
+    >
       <div class="select-clock__wrapper">
         <div class="select-clock__header">
           <img
@@ -52,7 +56,7 @@
               сhangeRecordingDate(
                 `${('0' + Number(new Date().getDate())).slice(-2)}/${(
                   '0' + Number(new Date().getMonth() + 1)
-                ).slice(-2)}`
+                ).slice(-2)}/${new Date().getFullYear()}`
               )
             "
             class="select-clock__button"
@@ -61,7 +65,8 @@
                 recordingDate.split(' ')[0] ===
                   `${('0' + Number(new Date().getDate())).slice(-2)}/${(
                     '0' + Number(new Date().getMonth() + 1)
-                  ).slice(-2)}` && activeChooseDate != true,
+                  ).slice(-2)}/${new Date().getFullYear()}` &&
+                activeChooseDate != true,
             }"
           >
             Сегодня
@@ -71,7 +76,7 @@
               сhangeRecordingDate(
                 `${('0' + Number(new Date().getDate() + 1)).slice(-2)}/${(
                   '0' + Number(new Date().getMonth() + 1)
-                ).slice(-2)}`
+                ).slice(-2)}/${new Date().getFullYear()}`
               )
             "
             :class="{
@@ -79,7 +84,8 @@
                 recordingDate.split(' ')[0] ===
                   `${('0' + Number(new Date().getDate() + 1)).slice(-2)}/${(
                     '0' + Number(new Date().getMonth() + 1)
-                  ).slice(-2)}` && activeChooseDate != true,
+                  ).slice(-2)}/${new Date().getFullYear()}` &&
+                activeChooseDate != true,
             }"
             class="select-clock__button"
           >
@@ -192,7 +198,11 @@
         </div>
       </div>
       <transition name="fade">
-        <select-calendar v-if="activeChooseDate"></select-calendar>
+        <select-calendar
+          @update-clock="updateClock"
+          @close-choose-data="closeChooseData"
+          v-if="activeChooseDate"
+        ></select-calendar>
       </transition>
       <button class="select-clock__done" @click="activeModalWindowDate = false">
         Готово
@@ -220,23 +230,74 @@ export default {
     };
   },
   created() {
-    // const getRecordingDate = this.$localStorage.get("clock");
-    // const dayAndMonth = getRecordingDate.split(" ")[0].split("/");
-    // const day = new Date().getDate();
-    // const month = new Date().getMonth() + 1;
-    // if (dayAndMonth.length === 2) {
-    //   if (day <= Number(dayAndMonth[0]) && month <= dayAndMonth[1]) {
-    //     this.recordingDate = this.$localStorage.get("clock");
-    //   }
-    // } else {
-    //   if (getRecordingDate.split(" ").length === 1) {
-    //     this.from = this.$localStorage.get("clock").split("-")[0];
-    //     this.to = this.$localStorage.get("clock").split("-")[1];
-    //     this.activeChooseTime = true;
-    //   }
-    // }
+    this.getClockAfterUpdate();
+    this.checkActiveChooseDate();
   },
   methods: {
+    checkActiveChooseDate() {
+      if (
+        this.$localStorage.get("clock")
+          ? this.$localStorage.get("clock").split(" ")[0].split("/").length ===
+            3
+          : false
+      ) {
+        if (
+          this.$localStorage.get("clock").split(" ")[0] !== this.today &&
+          this.$localStorage.get("clock").split(" ")[0] !== this.tomorrow
+        ) {
+          this.activeChooseDate = true;
+        }
+      }
+    },
+    closeChooseData(v) {
+      this.activeChooseDate = v;
+    },
+    updateClock(v) {
+      this.recordingDate = v;
+    },
+    getClockAfterUpdate() {
+      const getRecordingDate = this.$localStorage.get("clock")?.split(" ") || [
+        "",
+      ];
+      const date = getRecordingDate[0].split("/");
+      const day = new Date().getDate();
+      const month = new Date().getMonth() + 1;
+      const year = new Date().getFullYear();
+      if (getRecordingDate.length === 2) {
+        if (
+          day <= Number(date[0]) &&
+          month <= Number(date[1]) &&
+          year <= Number(date[2])
+        ) {
+          this.recordingDate = getRecordingDate[0];
+          this.from = getRecordingDate[1].split("-")[0];
+          this.to = getRecordingDate[1].split("-")[1];
+          this.activeChooseTime = true;
+        } else {
+          this.$localStorage.set("clock", "");
+        }
+      } else {
+        if (getRecordingDate.length === 1) {
+          if (getRecordingDate[0].split("/").length === 3) {
+            if (
+              day <= Number(date[0]) &&
+              month <= Number(date[1]) &&
+              year <= Number(date[2])
+            ) {
+              this.recordingDate = getRecordingDate[0];
+            } else {
+              this.$localStorage.set("clock", "");
+            }
+          } else {
+            if (getRecordingDate[0].split("-").length === 2) {
+              this.from = getRecordingDate[0].split("-")[0];
+              this.to = getRecordingDate[0].split("-")[1];
+              this.activeChooseTime = true;
+            }
+          }
+        }
+      }
+    },
     clearClock() {
       this.recordingDate = "";
       this.activeChooseDate = false;
@@ -265,7 +326,28 @@ export default {
         getClass != "select-clock__button select-clock__button_active" &&
         getClass != "select-clock__time_value" &&
         getClass != "select-clock__label" &&
-        getClass != "select-clock__time"
+        getClass != "select-clock__time" &&
+        getClass != "select-clock__calendar" &&
+        getClass != "select-clock__time_input" &&
+        getClass != "select-calendar__prev" &&
+        getClass != "select-calendar__next" &&
+        getClass != "select-calendar__img" &&
+        getClass != "select-calendar" &&
+        getClass != "select-calendar__header" &&
+        getClass != "select-calendar__times" &&
+        getClass != "calendar__week" &&
+        getClass != "select-calendar__day-of-week" &&
+        getClass != "select-calendar__week" &&
+        getClass != "select-calendar__day" &&
+        getClass != "select-calendar__day select-calendar__day_before" &&
+        getClass != "select-calendar__day select-calendar__day_after" &&
+        getClass != "select-calendar__wrapper" &&
+        getClass != "select-calendar__day select-calendar__day_active" &&
+        getClass !=
+          "select-calendar__day select-calendar__day_before select-calendar__day_active" &&
+        getClass !=
+          "select-calendar__day select-calendar__day_after select-calendar__day_active" &&
+        getClass != "select-calendar__p"
       ) {
         this.activeModalWindowDate = false;
       }
@@ -325,15 +407,15 @@ export default {
     width: calc(100% - 12px)
     top: 42px
     left: 5px
-    min-height: 307px
+    min-height: 320px
     background: white
     position: absolute
     z-index: 100
     padding: 16px 12px
     &__time
-      margin-top: 25px
+      margin-top: 20px
       width: 100%
-      margin-bottom: 45px
+      margin-bottom: 50px
       &_select
         border: 1px solid #4d4d4d
         top: -602%
@@ -375,7 +457,7 @@ export default {
       box-sizing: border-box
       position: absolute
       border-radius: 4px
-      bottom: 12px
+      bottom: 18px
       width: calc(100% - 24px)
       text-align: center
       height: 40px
@@ -402,7 +484,7 @@ export default {
       display: flex
       justify-content: space-between
       flex-wrap: wrap
-      margin-top: 15px
+      margin-top: 18px
       .select-clock__button
         display: block
         font-size: 15px
