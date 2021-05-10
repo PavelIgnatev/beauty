@@ -26,7 +26,7 @@ export default {
 <style lang="sass">
 .block-information
   cursor: pointer
-  width: clamp(300px, 48%, 600px)
+  width: 48%
   height: 280px
   position: relative
   &__wrapper

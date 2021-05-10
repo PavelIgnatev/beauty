@@ -83,6 +83,7 @@ export default {
     return {
       activeModalWindowCity: false,
       city: this.$localStorage.get("city") ?? "",
+      shortCity: "",
       cityCoords: [55.7540471, 37.620405],
     };
   },
@@ -93,11 +94,12 @@ export default {
     },
     selectSuggestion(suggestion) {
       this.city = suggestion.value;
+      this.shortCity = suggestion.data.city_with_type;
       this.cityCoords = [suggestion.data.geo_lat, suggestion.data.geo_lon];
     },
     updatePossibleCity: _.debounce(function (value) {
       this.getCity(value);
-    }, 500),
+    }, 200),
     getLocation() {
       if (!navigator.geolocation) {
         this.$localStorage.set("Geolocation", false);
@@ -141,6 +143,9 @@ export default {
     cityCoords(value) {
       this.$localStorage.set("city", this.city);
       this.$localStorage.set("cityCoords", value);
+    },
+    shortCity(value) {
+      this.$localStorage.set("shortCity", value);
     },
   },
   directives: {

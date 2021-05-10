@@ -19,7 +19,9 @@
         </div>
       </div>
     </transition>
-    <button class="deskbar__button">Найти подходящий салон</button>
+    <button class="deskbar__button" @click="routerPush">
+      Найти подходящий салон
+    </button>
   </div>
 </template>
 <script>
@@ -39,6 +41,58 @@ export default {
   methods: {
     tabActive: function (active) {
       this.isActiveTab = active;
+    },
+    routerPush() {
+      const cityCoords =
+        this.$localStorage.get("cityCoords") || "55.75396,37.620393";
+      const service =
+        this.$store.state.BasicData.AllQueriesDeskbarInputService[
+          this.$localStorage.get("service")
+        ] || "fully";
+
+      const time = this.$localStorage.get("clock") || "";
+
+      this.$router
+        .push({
+          path: "/places",
+          query: {
+            treatment: `${service
+              .toLowerCase()
+              .replace(":", " ")
+              .split(" ")
+              .join("-")}`,
+            geocode: cityCoords,
+            timerange: `${
+              time.split(" ")[1]
+                ? time.split(" ")[1].split("-")[0].replace(":", "")
+                : time.split(" ").length === 1 &&
+                  time.split(" ")[0].split("-").length > 1
+                ? time.split(" ")[0].split("-")[0].replace(":", "")
+                : "0000"
+            }-to-${
+              time.split(" ")[1]
+                ? time.split(" ")[1].split("-")[1].replace(":", "")
+                : time.split(" ").length === 1 &&
+                  time.split(" ")[0].split("-").length > 1
+                ? time.split(" ")[0].split("-")[1].replace(":", "")
+                : "2400"
+            }`,
+            date:
+              time.split(" ")[0] && time.split(" ")[0].split("/").length === 3
+                ? time.split(" ")[0].replace("/", "-").replace("/", "-").trim()
+                : "any",
+          },
+        })
+        .catch((err) => {
+          if (
+            err.name !== "NavigationDuplicated" &&
+            !err.message.includes(
+              "Avoided redundant navigation to current location"
+            )
+          ) {
+            Error(err);
+          }
+        });
     },
   },
   components: { SelectClock, SelectService, SelectCity, DeskbarTabs },
@@ -325,23 +379,28 @@ export default {
       padding-top: 8px
 
 .deskbar
-  &__option-header
-    font-size: 14px !important
-    font-weight: 600
-    color: rgba(0,0,0,.85) !important
-    display: block
-    padding-top: 16px !important
-    padding-bottom: 7px !important
-    pointer-events: none
-    &::before
-      position: static
-      content: ''
-      border: 0
-      font-size: 0
-      width: 0px
-      height: 0px
-    &::after
-      display: none
+  &__option
+    &-header
+      font-size: 14px !important
+      font-weight: 600
+      color: rgba(0,0,0,.85) !important
+      display: block
+      padding-top: 16px !important
+      padding-bottom: 7px !important
+      pointer-events: none
+      &::before
+        position: static
+        content: ''
+        border: 0
+        font-size: 0
+        width: 0px
+        height: 0px
+      &::after
+        display: none
+    &_not-found
+      padding-top: 16px !important
+      padding-bottom: 16px !important
+      color: #d54327 !important
   &__option-geoposition
     pointer-events: auto
     position: relative
