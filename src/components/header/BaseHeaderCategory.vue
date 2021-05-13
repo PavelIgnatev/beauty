@@ -95,7 +95,7 @@ export default {
 <style lang="sass">
 .base-header
   &__active
-    color: $palette-orange
+    color: $palette-orange !important
   &__HeaderCategory
     text-align: center
     height: 50px
@@ -124,13 +124,13 @@ export default {
       left: 0
       background: #D54327
   &__link
+    height: calc(194px / 7)
     z-index: 100
     text-decoration: none
     color: $palette-white
     text-align: left
     display: flex
     align-items: center
-    height: calc(194px / 7)
     cursor: pointer
   &__list_wrapper
     width: 100%
@@ -144,6 +144,12 @@ export default {
     height: 100%
     z-index: 100
     cursor: pointer
+  .base-header-for-business__nav
+    justify-content: start
+    padding: 0 calc(33px / 2) !important
+  .base-header-for-business__link
+    transition: 0.2s ease-in-out
+    padding: 0 calc(33px / 2) !important
 .BaseHeaderFade-enter-active, .BaseHeaderFade-leave-active
   transition: opacity .5s ease-in-out
 .BaseHeaderFade-enter, .BaseHeaderFade-leave-to

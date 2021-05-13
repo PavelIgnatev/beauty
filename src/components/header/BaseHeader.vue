@@ -1,25 +1,59 @@
 <template>
   <header class="base-header">
-    <div class="base-header__wrapper">
-      <router-link to="/" class="base-header__name base-header__link"
-        ><p>comfortreat</p></router-link
-      >
-      <nav class="base-header__nav">
-        <BaseHeaderCategory
-          v-for="category in $store.state.BasicData.BaseHeaderCategories"
-          :key="category.name"
-          :header-category="category"
-        ></BaseHeaderCategory>
-      </nav>
-      <router-link to="/login" class="base-header__login"
-        ><img
-          class="base-header__login_img"
-          src="@/assets/img/icons/user.svg"
-          alt="user"
-        />
-        <p>Войти</p></router-link
-      >
-    </div>
+    <template
+      v-if="
+        $route.path.split('/')[1] !== 'business' || !$route.path.split('/')[1]
+      "
+    >
+      <div class="base-header__wrapper">
+        <router-link to="/" class="base-header__name base-header__link"
+          ><p>comfortreat</p></router-link
+        >
+        <nav class="base-header__nav">
+          <BaseHeaderCategory
+            v-for="category in $store.state.BasicData.BaseHeaderCategories"
+            :key="category.name"
+            :header-category="category"
+          ></BaseHeaderCategory>
+        </nav>
+        <router-link to="/login" class="base-header__login"
+          ><img
+            class="base-header__login_img"
+            src="@/assets/img/icons/user.svg"
+            alt="user"
+          />
+          <p>Войти</p></router-link
+        >
+      </div>
+    </template>
+    <template v-else>
+      <div class="base-header__wrapper">
+        <router-link to="/business" class="base-header__name base-header__link"
+          ><p>comfortreat.business</p></router-link
+        >
+        <nav class="base-header-for-business__nav base-header__nav">
+          <router-link
+            v-for="category in $store.state.BasicData
+              .BaseHeaderCategoriesForBusiness"
+            class="base-header__link base-header-for-business__link"
+            :key="category.name"
+            :to="category.to"
+            :class="{
+              'base-header__active': $route.path == category.to,
+            }"
+            >{{ category.name }}</router-link
+          >
+        </nav>
+        <router-link to="/business/login" class="base-header__login"
+          ><img
+            class="base-header__login_img"
+            src="@/assets/img/icons/user.svg"
+            alt="user"
+          />
+          <p>Войти</p></router-link
+        >
+      </div>
+    </template>
   </header>
 </template>
 <script>

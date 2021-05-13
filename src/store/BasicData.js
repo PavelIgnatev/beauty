@@ -302,6 +302,24 @@ export default {
         ],
       },
     ],
+    BaseHeaderCategoriesForBusiness: [
+      {
+        name: "Возможности",
+        to: "/business/capabilities",
+      },
+      {
+        name: "Наши партнёры",
+        to: "/business/partners",
+      },
+      {
+        name: "Тарифы",
+        to: "/business/tariffs",
+      },
+      {
+        name: "Ресурсы",
+        to: "/business/resources",
+      },
+    ],
     BaseFooterCategories: [
       {
         name: "Контакты",
@@ -321,7 +339,7 @@ export default {
       {
         name: "Партнёрство",
         value: [
-          { name: "Начать сотрудничать", href: "/" },
+          { name: "Начать сотрудничать", href: "/business/registration" },
           { name: "Список наших партнёров", href: "/" },
           { name: "Справка партнёрства", href: "/" },
         ],
@@ -331,6 +349,36 @@ export default {
         value: [
           { name: "О нас", href: "/" },
           { name: "Пользовательское соглашение", href: "/" },
+        ],
+      },
+    ],
+    BaseFooterCategoriesForBusiness: [
+      {
+        name: "Возможноости",
+        value: [
+          { name: "Как всё работает", href: "/business" },
+          { name: "Почему comfortreat?", href: "/business" },
+        ],
+      },
+      {
+        name: "Наши партнёры",
+        value: [
+          { name: "Список наших партнёров", href: "/business" },
+          { name: "Справка партнёрства", href: "/business" },
+        ],
+      },
+      {
+        name: "Компания",
+        value: [
+          { name: "О нас", href: "/business" },
+          { name: "Пользовательское соглашение", href: "/business" },
+        ],
+      },
+      {
+        name: "Ресурсы comfortreat",
+        value: [
+          { name: "FAQ", href: "/business" },
+          { name: "Блог", href: "/business" },
         ],
       },
     ],
@@ -357,6 +405,7 @@ export default {
         description:
           "Наша задача - не только упростить жизнь каждому, кто захочет посетить салон красоты, но и поддержать исполнителей данных услуг",
         btntext: "Узнать подробнее",
+        href: "/business/registration",
         source: "bg-salon.png",
       },
       {
@@ -364,6 +413,7 @@ export default {
         description:
           "Новинки мировой индустрии красоты, которые вызывали наибольший отклик у людей в этом году! \n Вперёд к трендам!",
         btntext: "Мне интересно",
+        href: "/",
         source: "bg-moda.png",
       },
     ],

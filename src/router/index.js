@@ -5,6 +5,14 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    path: "/business/login",
+    component: () => import("../components/login/BaseLoginForBusinessUser.vue"),
+  },
+  {
+    path: "/login",
+    component: () => import("../components/login/BaseLoginForUser.vue"),
+  },
+  {
     path: "/",
     name: "LandingPage",
     component: LandingPage,

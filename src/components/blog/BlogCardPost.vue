@@ -1,5 +1,5 @@
 <template>
-  <div class="block-information">
+  <router-link :to="href" class="block-information">
     <div class="block-information__wrapper">
       <div
         class="block-information__bg"
@@ -13,18 +13,25 @@
         {{ name }}
       </div>
       <div class="block-information__descr">{{ description }}</div>
-      <button class="block-information__btn">{{ btntext }}</button>
+      <div class="block-information__btn">{{ btntext }}</div>
     </div>
-  </div>
+  </router-link>
 </template>
 <script>
 export default {
   name: "block-information",
-  props: ["name", "description", "source", "btntext"],
+  props: {
+    name: String,
+    description: String,
+    source: String,
+    btntext: String,
+    href: String,
+  },
 };
 </script>
 <style lang="sass">
 .block-information
+  text-decoration: none
   cursor: pointer
   width: 48%
   height: 280px
@@ -46,6 +53,7 @@ export default {
     margin-top: 15px
     color: $palette-black
   &__btn
+    text-decoration: none
     position: absolute
     bottom: 0
     display: block

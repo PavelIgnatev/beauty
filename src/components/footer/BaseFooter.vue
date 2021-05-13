@@ -1,33 +1,68 @@
 <template>
   <footer class="base-footer">
-    <div class="base-footer__category">
-      <BaseFooterCategory
-        v-for="category in $store.state.BasicData.BaseFooterCategories"
-        :key="category.name"
-        :footer-category="category"
-      ></BaseFooterCategory>
-    </div>
-    <div class="base-footer__foot">
-      <hr />
-      <div class="base-footer__wrapper">
-        <div class="base-header__name">comfortreat</div>
-        <div class="base-footer__year">@comfortreat.com 2021</div>
-        <div class="base-footer__social-network">
-          <router-link
-            to=""
-            class="base-footer__link base-footer__vk"
-          ></router-link>
-          <router-link
-            to=""
-            class="base-footer__link base-footer__inst"
-          ></router-link>
-          <router-link
-            to=""
-            class="base-footer__link base-footer__youtube"
-          ></router-link>
+    <template
+      v-if="$route.path.split('/')[1] === 'login' || !$route.path.split('/')[1]"
+    >
+      <div class="base-footer__category">
+        <BaseFooterCategory
+          v-for="category in $store.state.BasicData.BaseFooterCategories"
+          :key="category.name"
+          :footer-category="category"
+        ></BaseFooterCategory>
+      </div>
+      <div class="base-footer__foot">
+        <hr />
+        <div class="base-footer__wrapper">
+          <div class="base-header__name">comfortreat</div>
+          <div class="base-footer__year">@comfortreat.com 2021</div>
+          <div class="base-footer__social-network">
+            <router-link
+              to=""
+              class="base-footer__link base-footer__vk"
+            ></router-link>
+            <router-link
+              to=""
+              class="base-footer__link base-footer__inst"
+            ></router-link>
+            <router-link
+              to=""
+              class="base-footer__link base-footer__youtube"
+            ></router-link>
+          </div>
         </div>
       </div>
-    </div>
+    </template>
+    <template v-else>
+      <div class="base-footer__category">
+        <BaseFooterCategory
+          v-for="category in $store.state.BasicData
+            .BaseFooterCategoriesForBusiness"
+          :key="category.name"
+          :footer-category="category"
+        ></BaseFooterCategory>
+      </div>
+      <div class="base-footer__foot">
+        <hr />
+        <div class="base-footer__wrapper">
+          <div class="base-header__name">comfortreat.business</div>
+          <div class="base-footer__year">@comfortreat.com 2021</div>
+          <div class="base-footer__social-network">
+            <router-link
+              to=""
+              class="base-footer__link base-footer__vk"
+            ></router-link>
+            <router-link
+              to=""
+              class="base-footer__link base-footer__inst"
+            ></router-link>
+            <router-link
+              to=""
+              class="base-footer__link base-footer__youtube"
+            ></router-link>
+          </div>
+        </div>
+      </div>
+    </template>
   </footer>
 </template>
 <script>

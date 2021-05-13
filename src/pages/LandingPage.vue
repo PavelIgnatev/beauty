@@ -8,14 +8,15 @@
       </div>
     </section>
     <section class="main-page__information">
-      <BlogCardPost
+      <blog-card-post
         v-for="data in this.$store.state.BasicData.MainPageBlogCardPost"
         :key="data.name"
         :name="data.name"
         :description="data.description"
         :btntext="data.btntext"
         :source="data.source"
-      ></BlogCardPost>
+        :href="data.href"
+      ></blog-card-post>
     </section>
     <section class="main-page__advantages">
       <div class="main-page__title">Преимущества, которыми мы гордимся:</div>
@@ -38,7 +39,9 @@
           Открывайте новые возможности и получайте <br />
           клиентов, используя удобную систему записей.
         </div>
-        <div class="main-page__cooperation_btn">Начать сотрудничать</div>
+        <router-link to="/business/login" class="main-page__cooperation_btn"
+          >Начать сотрудничать</router-link
+        >
       </div>
     </section>
   </div>
@@ -93,6 +96,7 @@ export default {
       margin-top: 11px
       font-size: 15px
     &_btn
+      text-decoration: none
       cursor: pointer
       margin-top: 20px
       padding: 0px 15px
