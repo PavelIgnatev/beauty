@@ -324,11 +324,13 @@ export default {
       this.recordingDate = date;
       this.activeChooseDate = false;
     },
-    hideActiveFrom() {
-      this.activeFrom = false;
+    hideActiveFrom(e) {
+      const getClass = Object.values(e.path)[0]?.classList.value;
+      if (getClass != "select-clock__time_value") this.activeFrom = false;
     },
-    hideActiveTo() {
-      this.activeTo = false;
+    hideActiveTo(e) {
+      const getClass = Object.values(e.path)[0]?.classList.value;
+      if (getClass != "select-clock__time_value") this.activeTo = false;
     },
     hideActiveModalWindowDate(e) {
       const getClass = Object.values(e.path)[0]?.classList.value;
