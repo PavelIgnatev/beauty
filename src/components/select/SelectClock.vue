@@ -5,6 +5,7 @@
       class="deskbar__clock"
       placeholder="Любая Дата"
       @click="activeModalWindowDate = true"
+      @tap="activeModalWindowDate = true"
       :value="
         recordingDate +
         (recordingDate && activeChooseTime ? ' ' : '') +
@@ -156,19 +157,23 @@
                         'select-clock__button_active': activeFrom === true,
                       }"
                     />
-                    <div
-                      class="select-clock__time_select select-clock__time_from"
-                      v-if="activeFrom"
-                    >
+                    <transition name="fade">
                       <div
-                        class="select-clock__time_value"
-                        v-for="i in 24"
-                        :key="i"
-                        @click="from = ('0' + Number(i - 1)).slice(-2) + ':00'"
+                        class="select-clock__time_select select-clock__time_from"
+                        v-if="activeFrom"
                       >
-                        {{ `${("0" + Number(i - 1)).slice(-2)}:00` }}
+                        <div
+                          class="select-clock__time_value"
+                          v-for="i in 24"
+                          :key="i"
+                          @click="
+                            from = ('0' + Number(i - 1)).slice(-2) + ':00'
+                          "
+                        >
+                          {{ `${("0" + Number(i - 1)).slice(-2)}:00` }}
+                        </div>
                       </div>
-                    </div>
+                    </transition>
                   </div>
                   <div class="select-clock__time_input">
                     <label class="select-clock__label" for="to">До</label>
@@ -184,19 +189,21 @@
                         'select-clock__button_active': activeTo === true,
                       }"
                     />
-                    <div
-                      class="select-clock__time_select select-clock__time_to"
-                      v-if="activeTo"
-                    >
+                    <transition name="fade">
                       <div
-                        class="select-clock__time_value"
-                        v-for="i in 24"
-                        :key="i"
-                        @click="to = ('0' + Number(i)).slice(-2) + ':00'"
+                        class="select-clock__time_select select-clock__time_to"
+                        v-if="activeTo"
                       >
-                        {{ `${("0" + Number(i)).slice(-2)}:00` }}
+                        <div
+                          class="select-clock__time_value"
+                          v-for="i in 24"
+                          :key="i"
+                          @click="to = ('0' + Number(i)).slice(-2) + ':00'"
+                        >
+                          {{ `${("0" + Number(i)).slice(-2)}:00` }}
+                        </div>
                       </div>
-                    </div>
+                    </transition>
                   </div>
                 </div>
               </div>

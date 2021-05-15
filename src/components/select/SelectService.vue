@@ -17,51 +17,54 @@
       v-if="service"
       @click="clearService"
     ></div>
-    <div class="select__wrapper" v-if="activeModalWindowService">
-      <template v-if="service.length < 1">
-        <div class="deskbar__option deskbar__option-header">
-          Популярные поисковые запросы
-        </div>
-        <div
-          :value="request"
-          :key="request"
-          @click="service = request"
-          v-for="request in Object.keys(
-            $store.state.BasicData.PopularQueriesDeskbarInputService
-          )"
-          class="deskbar__option"
-          :class="{
-            deskbar__option_active: request === $localStorage.get('service'),
-          }"
-        >
-          {{ request }}
-        </div>
-      </template>
-      <template v-else-if="matches.length > 0">
-        <div class="deskbar__option deskbar__option-header">
-          Подходящие методы лечения
-        </div>
-        <div
-          :value="request"
-          :key="request + index"
-          @click="service = request"
-          v-for="(request, index) in matches"
-          class="deskbar__option"
-          :class="{
-            deskbar__option_active: request === $localStorage.get('service'),
-          }"
-        >
-          {{ request }}
-        </div>
-      </template>
-      <template v-else>
-        <div
-          class="deskbar__option deskbar__option-header deskbar__option_not-found"
-        >
-          По данному запросу ничего не найдено
-        </div>
-      </template>
-    </div>
+    <transition name="fade">
+      <div class="select__wrapper" v-if="activeModalWindowService">
+        <template v-if="service.length < 1">
+          <div class="deskbar__option deskbar__option-header">
+            Популярные поисковые запросы
+          </div>
+          <div
+            :value="request"
+            :key="request"
+            @click="service = request"
+            v-for="request in Object.keys(
+              $store.state.BasicData.PopularQueriesDeskbarInputService
+            )"
+            class="deskbar__option"
+            :class="{
+              deskbar__option_active: request === $localStorage.get('service'),
+            }"
+          >
+            {{ request }}
+          </div>
+        </template>
+        <template v-else-if="matches.length > 0">
+          <div class="deskbar__option deskbar__option-header">
+            Подходящие методы лечения
+          </div>
+          <div
+            :value="request"
+            :key="request + index"
+            @tap="service = request"
+            @click="service = request"
+            v-for="(request, index) in matches"
+            class="deskbar__option"
+            :class="{
+              deskbar__option_active: request === $localStorage.get('service'),
+            }"
+          >
+            {{ request }}
+          </div>
+        </template>
+        <template v-else>
+          <div
+            class="deskbar__option deskbar__option-header deskbar__option_not-found"
+          >
+            По данному запросу ничего не найдено
+          </div>
+        </template>
+      </div>
+    </transition>
   </div>
 </template>
 <script>

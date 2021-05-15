@@ -10,67 +10,69 @@
       placeholder="Выберите населённый пункт"
     />
     <div class="deskbar__select_exit" v-if="city" @click="clearCity"></div>
-    <div v-if="activeModalWindowCity" class="select__wrapper">
-      <div
-        class="deskbar__option deskbar__option-header deskbar__option-geoposition"
-        @click="getLocation"
-        v-if="this.$localStorage.get('Geolocation') !== 'false'"
-      >
-        Ваше текущее расположение
-      </div>
-      <div
-        class="deskbar__option deskbar__option-header"
-        v-if="
-          Object.values(
-            $store.state.DadataApi.dadata
-              ? JSON.parse($store.state.DadataApi.dadata)
-              : [{}]
-          )[0].length
-        "
-      >
-        Выберите населённый пункт
-      </div>
-      <div
-        class="deskbar__option deskbar__option-header"
-        v-if="
-          !Object.values(
-            $store.state.DadataApi.dadata
-              ? JSON.parse($store.state.DadataApi.dadata)
-              : [{}]
-          )[0].length
-        "
-      >
-        Популярные поисковые запросы
-      </div>
-      <!-- Магический for для вывода городов из инпута или популярных городов из state -->
-      <div
-        :key="request.value"
-        @click="selectSuggestion(request.suggestion)"
-        v-for="request in Object.values(
-          $store.state.DadataApi.dadata
-            ? JSON.parse($store.state.DadataApi.dadata)
-            : [{}]
-        )[0].length
-          ? Object.values(
+    <transition name="fade">
+      <div v-if="activeModalWindowCity" class="select__wrapper">
+        <div
+          class="deskbar__option deskbar__option-header deskbar__option-geoposition"
+          @click="getLocation"
+          v-if="this.$localStorage.get('Geolocation') !== 'false'"
+        >
+          Ваше текущее расположение
+        </div>
+        <div
+          class="deskbar__option deskbar__option-header"
+          v-if="
+            Object.values(
               $store.state.DadataApi.dadata
                 ? JSON.parse($store.state.DadataApi.dadata)
-                : [[]]
-            )[0].map((item) =>
-              item
-                ? { value: item.value, suggestion: item }
-                : { value: '', data: '' }
-            )
-          : $store.state.BasicData.PopularQueriesDeskbarInputCity"
-        class="deskbar__option"
-        :class="{
-          deskbar__option_active:
-            request.value === $localStorage.get('city') &&
-            $localStorage.get('cityCoords').length,
-        }"
-      >
-        {{ request.value }}
+                : [{}]
+            )[0].length
+          "
+        >
+          Выберите населённый пункт
+        </div>
+        <div
+          class="deskbar__option deskbar__option-header"
+          v-if="
+            !Object.values(
+              $store.state.DadataApi.dadata
+                ? JSON.parse($store.state.DadataApi.dadata)
+                : [{}]
+            )[0].length
+          "
+        >
+          Популярные поисковые запросы
+        </div>
+        <!-- Магический for для вывода городов из инпута или популярных городов из state -->
+        <div
+          :key="request.value"
+          @click="selectSuggestion(request.suggestion)"
+          v-for="request in Object.values(
+            $store.state.DadataApi.dadata
+              ? JSON.parse($store.state.DadataApi.dadata)
+              : [{}]
+          )[0].length
+            ? Object.values(
+                $store.state.DadataApi.dadata
+                  ? JSON.parse($store.state.DadataApi.dadata)
+                  : [[]]
+              )[0].map((item) =>
+                item
+                  ? { value: item.value, suggestion: item }
+                  : { value: '', data: '' }
+              )
+            : $store.state.BasicData.PopularQueriesDeskbarInputCity"
+          class="deskbar__option"
+          :class="{
+            deskbar__option_active:
+              request.value === $localStorage.get('city') &&
+              $localStorage.get('cityCoords').length,
+          }"
+        >
+          {{ request.value }}
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 <script>
