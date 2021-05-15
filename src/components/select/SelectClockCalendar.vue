@@ -323,7 +323,7 @@ export default {
   padding: 15px
   top: 0
   height: 100%
-  width: calc(100% - 12px)
+  width: 100%
   position: absolute
   background: white
   left: calc(100% - 1px)
@@ -396,4 +396,20 @@ export default {
         border-radius: 50%
     &_before, &_after
       background-color: #f5f5f5
+@media (max-width: 900.97px)
+  .select-calendar
+    padding: 0
+    position: static
+    box-shadow: none
+    margin: 15px 0
+  .select-clock
+    padding-bottom: 70px !important
+    &__time
+      margin-bottom: 0 !important
+@media (max-width: 410.97px)
+  .select-calendar__day
+    height: 40px !important
+@media (max-width: 368px)
+  .select-clock__button
+    font-size: 13px !important
 </style>

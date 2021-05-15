@@ -102,6 +102,13 @@
           </button>
         </div>
       </div>
+      <transition name="fade">
+        <select-calendar
+          @update-clock="updateClock"
+          @close-choose-data="closeChooseData"
+          v-if="activeChooseDate"
+        ></select-calendar>
+      </transition>
       <div class="select-clock__wrapper">
         <div class="select-clock__header">
           <img
@@ -197,13 +204,6 @@
           </transition>
         </div>
       </div>
-      <transition name="fade">
-        <select-calendar
-          @update-clock="updateClock"
-          @close-choose-data="closeChooseData"
-          v-if="activeChooseDate"
-        ></select-calendar>
-      </transition>
       <button class="select-clock__done" @click="activeModalWindowDate = false">
         Готово
       </button>

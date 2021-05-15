@@ -5,7 +5,7 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/business/login",
+    path: "/partners/login",
     component: () => import("../components/login/BaseLoginForBusinessUser.vue"),
   },
   {

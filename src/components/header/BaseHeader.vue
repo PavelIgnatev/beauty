@@ -2,19 +2,20 @@
   <header class="base-header">
     <template
       v-if="
-        $route.path.split('/')[1] !== 'business' || !$route.path.split('/')[1]
+        $route.path.split('/')[1] !== 'partners' || !$route.path.split('/')[1]
       "
     >
       <div class="base-header__wrapper">
         <router-link to="/" class="base-header__name base-header__link"
           ><p>comfortreat</p></router-link
         >
+
         <nav class="base-header__nav">
-          <BaseHeaderCategory
+          <baseHeaderCategory
             v-for="category in $store.state.BasicData.BaseHeaderCategories"
             :key="category.name"
             :header-category="category"
-          ></BaseHeaderCategory>
+          ></baseHeaderCategory>
         </nav>
         <router-link to="/login" class="base-header__login"
           ><img
@@ -28,13 +29,14 @@
     </template>
     <template v-else>
       <div class="base-header__wrapper">
-        <router-link to="/business" class="base-header__name base-header__link"
-          ><p>comfortreat.business</p></router-link
+        <router-link to="/partners" class="base-header__name base-header__link"
+          ><p>comfortreat.partners</p></router-link
         >
+
         <nav class="base-header-for-business__nav base-header__nav">
           <router-link
             v-for="category in $store.state.BasicData
-              .BaseHeaderCategoriesForBusiness"
+              .BaseHeaderCategoriesForPartners"
             class="base-header__link base-header-for-business__link"
             :key="category.name"
             :to="category.to"
@@ -44,7 +46,7 @@
             >{{ category.name }}</router-link
           >
         </nav>
-        <router-link to="/business/login" class="base-header__login"
+        <router-link to="/partners/login" class="base-header__login"
           ><img
             class="base-header__login_img"
             src="@/assets/img/icons/user.svg"
@@ -65,20 +67,27 @@ export default {
 </script>
 <style lang="sass">
 .base-header
-  height: 50px
+  height: 60px
   background: $palette-blue
   color: $palette-white
+  &__navigation
+    height: 100%
   &__wrapper
     align-items: center
     display: flex
     height: 100%
+    &_nav
+      display: flex
+      align-items: center
+      width: 100%
+      height: 100%
   &__name
     display: flex
-    height: 50px
+    height: 100%
     align-items: center
     font-family: 'Musket'
     color: $palette-red
-    font-size: 24px
+    font-size: 25px
     p
       display: flex
       align-items: center
@@ -97,11 +106,13 @@ export default {
     font-weight: 100
     font-size: 15px
   &__login
+    height: 100%
     display: flex
+    align-items: center
     color: $palette-white
     text-decoration: none
     p
-      font-size: 15px
+      font-size: 16px
       font-weight: 600
     &_img
       margin-right: 10px

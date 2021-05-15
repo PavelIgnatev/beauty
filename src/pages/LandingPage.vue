@@ -3,7 +3,7 @@
     <section class="main-page__selection">
       <DeskBar></DeskBar>
       <div class="main-page__selection_heading">
-        Мы за удобство <br />
+        Мы за удобство, <br />
         красоту и здоровье
       </div>
     </section>
@@ -36,10 +36,10 @@
           Добавьте свой салон в comfortreat
         </div>
         <div class="main-page__cooperation_subtitle">
-          Открывайте новые возможности и получайте <br />
+          Открывайте новые возможности и получайте <br class="isBr" />
           клиентов, используя удобную систему записей.
         </div>
-        <router-link to="/business/login" class="main-page__cooperation_btn"
+        <router-link to="/partners/login" class="main-page__cooperation_btn"
           >Начать сотрудничать</router-link
         >
       </div>

@@ -34,19 +34,21 @@
     </template>
     <template v-else>
       <div class="base-footer__category">
-        <BaseFooterCategory
+        <base-footer-category
           v-for="category in $store.state.BasicData
-            .BaseFooterCategoriesForBusiness"
+            .BaseFooterCategoriesForPartners"
           :key="category.name"
           :footer-category="category"
-        ></BaseFooterCategory>
+        ></base-footer-category>
       </div>
       <div class="base-footer__foot">
         <hr />
         <div class="base-footer__wrapper">
-          <div class="base-header__name">comfortreat.business</div>
+          <div class="base-header__name">comfortreat.partners</div>
           <div class="base-footer__year">@comfortreat.com 2021</div>
-          <div class="base-footer__social-network">
+          <div
+            class="base-footer__social-network base-footer__social-network_partners"
+          >
             <router-link
               to=""
               class="base-footer__link base-footer__vk"
@@ -97,6 +99,12 @@ export default {
       font-size: 14px
       color: rgba(255,255,255, 0.8)
       text-decoration: none
+    .footer-category
+      box-sizing: border-box
+      min-width: 18%
+      max-width: 24%
+      .footer-category__title
+        height: 30px
   &__wrapper
     padding-top: 5px
     display: flex
@@ -110,6 +118,7 @@ export default {
   &__year
     padding-left: 20px
     font-weight: 600
+    font-size: 15px
     padding-bottom: 1px
   &__link
     display: block

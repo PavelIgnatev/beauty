@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="base-headers">
     <div
-      class="base-header__category"
+      class="base-header__category base-header__navigation"
       @click="active = true"
       v-click-outside="isActive"
       :class="{ 'base-header__active': active }"
@@ -15,7 +15,7 @@
             v-for="(item, index) in HeaderCategory.value"
             :key="index"
             @click="routerPush(item)"
-            class="base-header__link"
+            class="base-header__link base-header__to"
           >
             {{ item.name }}
           </div>
@@ -93,12 +93,19 @@ export default {
 };
 </script>
 <style lang="sass">
+.base-headers
+  height: 100%
 .base-header
+  &__to
+    width: calc(100% / 3)
+  &__navigation
+    font-size: 16px
   &__active
+    font-size: 16px !important
     color: $palette-orange !important
   &__HeaderCategory
     text-align: center
-    height: 50px
+    height: 60px
     display: flex
     align-items: center
     cursor: pointer
@@ -107,9 +114,9 @@ export default {
     z-index: 10000
     position: absolute
     left: 0
-    top: 50px
+    top: 60px
     width: 100%
-    height: 260px
+    height: 290px
     padding-top: 33px !important
     padding-bottom: 33px !important
     background: #010235
@@ -124,7 +131,8 @@ export default {
       left: 0
       background: #D54327
   &__link
-    height: calc(194px / 7)
+    font-size: 16px
+    height: calc(224px / 7)
     z-index: 100
     text-decoration: none
     color: $palette-white

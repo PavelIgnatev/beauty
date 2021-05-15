@@ -302,22 +302,22 @@ export default {
         ],
       },
     ],
-    BaseHeaderCategoriesForBusiness: [
+    BaseHeaderCategoriesForPartners: [
       {
         name: "Возможности",
-        to: "/business/capabilities",
+        to: "/partners/capabilities",
       },
       {
         name: "Наши партнёры",
-        to: "/business/partners",
+        to: "/partners/partners",
       },
       {
         name: "Тарифы",
-        to: "/business/tariffs",
+        to: "/partners/tariffs",
       },
       {
         name: "Ресурсы",
-        to: "/business/resources",
+        to: "/partners/resources",
       },
     ],
     BaseFooterCategories: [
@@ -339,7 +339,7 @@ export default {
       {
         name: "Партнёрство",
         value: [
-          { name: "Начать сотрудничать", href: "/business/registration" },
+          { name: "Начать сотрудничать", href: "/partners/registration" },
           { name: "Список наших партнёров", href: "/" },
           { name: "Справка партнёрства", href: "/" },
         ],
@@ -352,33 +352,33 @@ export default {
         ],
       },
     ],
-    BaseFooterCategoriesForBusiness: [
+    BaseFooterCategoriesForPartners: [
       {
         name: "Возможноости",
         value: [
-          { name: "Как всё работает", href: "/business" },
-          { name: "Почему comfortreat?", href: "/business" },
+          { name: "Как всё работает", href: "/partners" },
+          { name: "Почему comfortreat?", href: "/partners" },
         ],
       },
       {
         name: "Наши партнёры",
         value: [
-          { name: "Список наших партнёров", href: "/business" },
-          { name: "Справка партнёрства", href: "/business" },
+          { name: "Список наших партнёров", href: "/partners" },
+          { name: "Справка партнёрства", href: "/partners" },
         ],
       },
       {
         name: "Компания",
         value: [
-          { name: "О нас", href: "/business" },
-          { name: "Пользовательское соглашение", href: "/business" },
+          { name: "О нас", href: "/partners" },
+          { name: "Пользовательское соглашение", href: "/partners" },
         ],
       },
       {
         name: "Ресурсы comfortreat",
         value: [
-          { name: "FAQ", href: "/business" },
-          { name: "Блог", href: "/business" },
+          { name: "FAQ", href: "/partners" },
+          { name: "Блог", href: "/partners" },
         ],
       },
     ],
@@ -405,7 +405,7 @@ export default {
         description:
           "Наша задача - не только упростить жизнь каждому, кто захочет посетить салон красоты, но и поддержать исполнителей данных услуг",
         btntext: "Узнать подробнее",
-        href: "/business/registration",
+        href: "/partners/registration",
         source: "bg-salon.png",
       },
       {
