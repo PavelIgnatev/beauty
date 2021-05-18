@@ -102,7 +102,7 @@ export default {
     font-size: 16px
   &__active
     font-size: 16px !important
-    color: $palette-orange !important
+    color: $palette-red !important
   &__HeaderCategory
     text-align: center
     height: 60px

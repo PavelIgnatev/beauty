@@ -39,7 +39,9 @@
           Открывайте новые возможности и получайте <br class="isBr" />
           клиентов, используя удобную систему записей.
         </div>
-        <router-link to="/partners/login" class="main-page__cooperation_btn"
+        <router-link
+          to="/partners/registration"
+          class="main-page__cooperation_btn"
           >Начать сотрудничать</router-link
         >
       </div>

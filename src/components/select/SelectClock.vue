@@ -25,196 +25,201 @@
       "
       @click="clearClock"
     ></div>
-    <div
-      class="select-clock"
-      v-if="activeModalWindowDate"
-      :style="{ minHeight: activeChooseDate ? '360px' : '320px' }"
-    >
-      <div class="select-clock__wrapper">
-        <div class="select-clock__header">
-          <img
-            src="@/assets/img/icons/calendar.svg"
-            class="select-clock__icon"
-            alt="date"
-          />
-          <div class="select-clock__text">Выбрать дату</div>
-        </div>
-        <div class="select-clock__buttons">
-          <button
-            @click="сhangeRecordingDate('')"
-            class="select-clock__button"
-            :class="{
-              'select-clock__button_active':
-                (recordingDate === '' ||
-                  recordingDate.split(' ')[0].split('/').length === 1) &&
-                !activeChooseDate,
-            }"
-          >
-            Любая Дата
-          </button>
-          <button
-            @click="
-              сhangeRecordingDate(
-                `${('0' + Number(new Date().getDate())).slice(-2)}/${(
-                  '0' + Number(new Date().getMonth() + 1)
-                ).slice(-2)}/${new Date().getFullYear()}`
-              )
-            "
-            class="select-clock__button"
-            :class="{
-              'select-clock__button_active':
-                recordingDate.split(' ')[0] ===
+    <transition name="fade">
+      <div
+        class="select-clock"
+        v-if="activeModalWindowDate"
+        :style="{ minHeight: activeChooseDate ? '360px' : '320px' }"
+      >
+        <div class="select-clock__wrapper">
+          <div class="select-clock__header">
+            <img
+              src="@/assets/img/icons/calendar.svg"
+              class="select-clock__icon"
+              alt="date"
+            />
+            <div class="select-clock__text">Выбрать дату</div>
+          </div>
+          <div class="select-clock__buttons">
+            <button
+              @click="сhangeRecordingDate('')"
+              class="select-clock__button"
+              :class="{
+                'select-clock__button_active':
+                  (recordingDate === '' ||
+                    recordingDate.split(' ')[0].split('/').length === 1) &&
+                  !activeChooseDate,
+              }"
+            >
+              Любая Дата
+            </button>
+            <button
+              @click="
+                сhangeRecordingDate(
                   `${('0' + Number(new Date().getDate())).slice(-2)}/${(
                     '0' + Number(new Date().getMonth() + 1)
-                  ).slice(-2)}/${new Date().getFullYear()}` &&
-                activeChooseDate != true,
-            }"
-          >
-            Сегодня
-          </button>
-          <button
-            @click="
-              сhangeRecordingDate(
-                `${('0' + Number(new Date().getDate() + 1)).slice(-2)}/${(
-                  '0' + Number(new Date().getMonth() + 1)
-                ).slice(-2)}/${new Date().getFullYear()}`
-              )
-            "
-            :class="{
-              'select-clock__button_active':
-                recordingDate.split(' ')[0] ===
+                  ).slice(-2)}/${new Date().getFullYear()}`
+                )
+              "
+              class="select-clock__button"
+              :class="{
+                'select-clock__button_active':
+                  recordingDate.split(' ')[0] ===
+                    `${('0' + Number(new Date().getDate())).slice(-2)}/${(
+                      '0' + Number(new Date().getMonth() + 1)
+                    ).slice(-2)}/${new Date().getFullYear()}` &&
+                  activeChooseDate != true,
+              }"
+            >
+              Сегодня
+            </button>
+            <button
+              @click="
+                сhangeRecordingDate(
                   `${('0' + Number(new Date().getDate() + 1)).slice(-2)}/${(
                     '0' + Number(new Date().getMonth() + 1)
-                  ).slice(-2)}/${new Date().getFullYear()}` &&
-                activeChooseDate != true,
-            }"
-            class="select-clock__button"
-          >
-            Завтра
-          </button>
-          <button
-            class="select-clock__button"
-            @click="activeChooseDate = true"
-            :class="{
-              'select-clock__button_active': activeChooseDate === true,
-            }"
-          >
-            Выбрать дату...
-          </button>
+                  ).slice(-2)}/${new Date().getFullYear()}`
+                )
+              "
+              :class="{
+                'select-clock__button_active':
+                  recordingDate.split(' ')[0] ===
+                    `${('0' + Number(new Date().getDate() + 1)).slice(-2)}/${(
+                      '0' + Number(new Date().getMonth() + 1)
+                    ).slice(-2)}/${new Date().getFullYear()}` &&
+                  activeChooseDate != true,
+              }"
+              class="select-clock__button"
+            >
+              Завтра
+            </button>
+            <button
+              class="select-clock__button"
+              @click="activeChooseDate = true"
+              :class="{
+                'select-clock__button_active': activeChooseDate === true,
+              }"
+            >
+              Выбрать дату...
+            </button>
+          </div>
         </div>
-      </div>
-      <transition name="fade">
-        <select-calendar
-          @update-clock="updateClock"
-          @close-choose-data="closeChooseData"
-          v-if="activeChooseDate"
-        ></select-calendar>
-      </transition>
-      <div class="select-clock__wrapper">
-        <div class="select-clock__header">
-          <img
-            src="@/assets/img/icons/clock.svg"
-            class="select-clock__icon"
-            alt="date"
-          />
-          <div class="select-clock__text">Выбрать время</div>
-        </div>
-        <div class="select-clock__buttons">
-          <button
-            class="select-clock__button"
-            @click="activeChooseTime = false"
-            :class="{
-              'select-clock__button_active':
-                !recordingDate.split(' ')[1] && activeChooseTime === false,
-            }"
-          >
-            Любое время
-          </button>
-          <button
-            class="select-clock__button"
-            @click="activeChooseTime = true"
-            :class="{
-              'select-clock__button_active': activeChooseTime === true,
-            }"
-          >
-            Выбрать время...
-          </button>
-          <transition name="fade">
-            <div class="select-clock__time" v-if="activeChooseTime">
-              <div class="select-clock__time__wrapper">
-                <div class="select-clock__time_inputs">
-                  <div class="select-clock__time_input">
-                    <label class="select-clock__label" for="from">С</label>
-                    <input
-                      type="text"
-                      id="from"
-                      class="select-clock__button"
-                      readonly
-                      @click="activeFrom = true"
-                      v-click-outside="hideActiveFrom"
-                      v-model="from"
-                      :class="{
-                        'select-clock__button_active': activeFrom === true,
-                      }"
-                    />
-                    <transition name="fade">
-                      <div
-                        class="select-clock__time_select select-clock__time_from"
-                        v-if="activeFrom"
-                      >
+        <transition name="fade">
+          <select-calendar
+            @update-clock="updateClock"
+            @close-choose-data="closeChooseData"
+            v-if="activeChooseDate"
+          ></select-calendar>
+        </transition>
+        <div class="select-clock__wrapper">
+          <div class="select-clock__header">
+            <img
+              src="@/assets/img/icons/clock.svg"
+              class="select-clock__icon"
+              alt="date"
+            />
+            <div class="select-clock__text">Выбрать время</div>
+          </div>
+          <div class="select-clock__buttons">
+            <button
+              class="select-clock__button"
+              @click="activeChooseTime = false"
+              :class="{
+                'select-clock__button_active':
+                  !recordingDate.split(' ')[1] && activeChooseTime === false,
+              }"
+            >
+              Любое время
+            </button>
+            <button
+              class="select-clock__button"
+              @click="activeChooseTime = true"
+              :class="{
+                'select-clock__button_active': activeChooseTime === true,
+              }"
+            >
+              Выбрать время...
+            </button>
+            <transition name="fade">
+              <div class="select-clock__time" v-if="activeChooseTime">
+                <div class="select-clock__time__wrapper">
+                  <div class="select-clock__time_inputs">
+                    <div class="select-clock__time_input">
+                      <label class="select-clock__label" for="from">С</label>
+                      <input
+                        type="text"
+                        id="from"
+                        class="select-clock__button"
+                        readonly
+                        @click="activeFrom = true"
+                        v-click-outside="hideActiveFrom"
+                        v-model="from"
+                        :class="{
+                          'select-clock__button_active': activeFrom === true,
+                        }"
+                      />
+                      <transition name="fade">
                         <div
-                          class="select-clock__time_value"
-                          v-for="i in 24"
-                          :key="i"
-                          @click="
-                            from = ('0' + Number(i - 1)).slice(-2) + ':00'
-                          "
+                          class="select-clock__time_select select-clock__time_from"
+                          v-if="activeFrom"
                         >
-                          {{ `${("0" + Number(i - 1)).slice(-2)}:00` }}
+                          <div
+                            class="select-clock__time_value"
+                            v-for="i in 24"
+                            :key="i"
+                            @click="
+                              from = ('0' + Number(i - 1)).slice(-2) + ':00'
+                            "
+                          >
+                            {{ `${("0" + Number(i - 1)).slice(-2)}:00` }}
+                          </div>
                         </div>
-                      </div>
-                    </transition>
-                  </div>
-                  <div class="select-clock__time_input">
-                    <label class="select-clock__label" for="to">До</label>
-                    <input
-                      type="text"
-                      class="select-clock__button"
-                      readonly
-                      id="to"
-                      @click="activeTo = true"
-                      v-click-outside="hideActiveTo"
-                      v-model="to"
-                      :class="{
-                        'select-clock__button_active': activeTo === true,
-                      }"
-                    />
-                    <transition name="fade">
-                      <div
-                        class="select-clock__time_select select-clock__time_to"
-                        v-if="activeTo"
-                      >
+                      </transition>
+                    </div>
+                    <div class="select-clock__time_input">
+                      <label class="select-clock__label" for="to">До</label>
+                      <input
+                        type="text"
+                        class="select-clock__button"
+                        readonly
+                        id="to"
+                        @click="activeTo = true"
+                        v-click-outside="hideActiveTo"
+                        v-model="to"
+                        :class="{
+                          'select-clock__button_active': activeTo === true,
+                        }"
+                      />
+                      <transition name="fade">
                         <div
-                          class="select-clock__time_value"
-                          v-for="i in 24"
-                          :key="i"
-                          @click="to = ('0' + Number(i)).slice(-2) + ':00'"
+                          class="select-clock__time_select select-clock__time_to"
+                          v-if="activeTo"
                         >
-                          {{ `${("0" + Number(i)).slice(-2)}:00` }}
+                          <div
+                            class="select-clock__time_value"
+                            v-for="i in 24"
+                            :key="i"
+                            @click="to = ('0' + Number(i)).slice(-2) + ':00'"
+                          >
+                            {{ `${("0" + Number(i)).slice(-2)}:00` }}
+                          </div>
                         </div>
-                      </div>
-                    </transition>
+                      </transition>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </transition>
+            </transition>
+          </div>
         </div>
+        <button
+          class="select-clock__done"
+          @click="activeModalWindowDate = false"
+        >
+          Готово
+        </button>
       </div>
-      <button class="select-clock__done" @click="activeModalWindowDate = false">
-        Готово
-      </button>
-    </div>
+    </transition>
   </div>
 </template>
 <script>
@@ -497,8 +502,8 @@ export default {
       font-size: 16px
       margin-left: 15px
     &__wrapper
-      &:nth-child(2)
-        margin-top: 8px
+      &:nth-child(1)
+        margin-bottom: 8px
     &__buttons
       display: flex
       justify-content: space-between
