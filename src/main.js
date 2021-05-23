@@ -1,6 +1,7 @@
 import Vue from "vue";
 import YmapPlugin from "vue-yandex-maps";
 import VueLocalStorage from "vue-localstorage";
+import Vuelidate from "vuelidate";
 import router from "./router";
 import store from "./store";
 import App from "./App.vue";
@@ -14,7 +15,7 @@ const settings = {
   coordorder: "latlong",
   version: "2.1",
 };
-
+Vue.use(Vuelidate);
 Vue.use(YmapPlugin, settings);
 Vue.use(VueLocalStorage);
 new Vue({

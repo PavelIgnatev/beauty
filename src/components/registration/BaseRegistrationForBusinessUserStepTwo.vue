@@ -1,9 +1,30 @@
 <template>
-  <div class="business-registration__main-step">
+  <form
+    class="business-registration__main-step"
+    @submit.prevent="submitHandler"
+  >
     <div class="business-registration__header">
       Выберите предоставляемые услуги
     </div>
-    <div class="business-registration__step">Шаг регистрации 2 из 3</div>
+    <div class="business-registration__step">Шаг регистрации 2 из 4</div>
+    <small
+      v-if="
+        ($v.activeService.$dirty && !$v.activeService.required) ||
+        ($v.activeService.$dirty && !$v.activeService.minLength)
+      "
+    >
+      Выберите не менее 1 услуги, которая cможет охарактеризовать основную
+      деятельность вашего салона
+    </small>
+    <small
+      v-else-if="
+        ($v.activeService.$dirty && !$v.activeService.required) ||
+        ($v.activeService.$dirty && !$v.activeService.maxLength)
+      "
+    >
+      Выберите не более 2 услуг, которые смогут охарактеризовать основную
+      деятельность вашего салона
+    </small>
     <div class="business-registration__services">
       <div
         class="business-registration__service"
@@ -866,65 +887,53 @@
         <div class="business-registration__description">Депиляция</div>
       </div>
     </div>
-    <button
-      @click="$emit('change-slide', 3)"
-      class="business-registration__button"
-    >
+    <button type="submit" class="business-registration__button">
       Продолжить регистрацию
     </button>
-  </div>
+  </form>
 </template>
 <script>
+import { required, minLength, maxLength } from "vuelidate/lib/validators";
 export default {
   name: "BaseRegistrationForBusinessUserStepTwo",
   data() {
     return {
-      source: "barber.svg",
-      services: [
-        { name: "Стрижка", imgSource: "haircut.svg" },
-        { name: "Ногти", imgSource: "fingernails.svg" },
-        { name: "Массаж", imgSource: "massage.svg" },
-        { name: "Спа", imgSource: "spa.svg" },
-        { name: "Барбер", imgSource: "barber.svg" },
-        { name: "Макияж", imgSource: "makeup.svg" },
-        { name: "Брови", imgSource: "eyebrows.svg" },
-        { name: "Депиляция", imgSource: "depilation.svg" },
-      ],
       activeService: [],
     };
   },
-  methods: {
-    checkService(name) {
-      if (this.activeService.length !== 2) {
-        if (this.activeService.indexOf(name) === -1) {
-          this.activeService.push(name);
-        } else {
-          this.activeService = this.activeService.slice(1);
-        }
-      } else {
-        if (this.activeService.length === 2) {
-          if (this.activeService.indexOf(name) === -1) {
-            this.activeService = this.activeService.slice(1);
-            this.activeService.push(name);
-          } else {
-            if (this.activeService.indexOf(name) === 1) {
-              this.activeService = this.activeService.slice(0, -1);
-            } else {
-              this.activeService = this.activeService.slice(1);
-            }
-          }
-        }
-      }
+  validations: {
+    activeService: {
+      required,
+      minLength: minLength(1),
+      maxLength: maxLength(2),
     },
   },
-  watch: {
-    activeService(value) {
-      this.$localStorage.set("activeService", value);
+  methods: {
+    submitHandler() {
+      if (this.$v.$invalid) {
+        this.$v.$touch();
+        return;
+      }
+      const FormData = {
+        activeService: this.activeService,
+      };
+      this.$emit("change-slide", 3, FormData);
+    },
+    checkService(name) {
+      if (this.activeService.indexOf(name) === -1) {
+        this.activeService.push(name);
+      } else {
+        this.activeService = this.activeService.filter((item) => item !== name);
+      }
     },
   },
 };
 </script>
 <style lang="sass">
+small
+  font-size: 90% !important
+  color: $palette-red
+  text-align: center
 .path
   stroke: red
 .business-registration

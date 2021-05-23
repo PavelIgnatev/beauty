@@ -1,14 +1,21 @@
 <template>
-  <div class="business-registration__main-step">
+  <form
+    class="business-registration__main-step"
+    @submit.prevent="submitHandler"
+  >
     <div class="business-registration__header">Какое у вас заведение?</div>
     <div class="business-registration__step" style="margin-bottom: 12px">
-      Шаг регистрации 3 из 3
+      Шаг регистрации 3 из 4
     </div>
-    <div class="business-registration__subheader">
-      Выберите тип вашего заведения, <br />
-      оно является специализированным или домашним салоном?
-      {{ activeServiceHome }}
-    </div>
+    <transition name="fade">
+      <div
+        class="business-registration__subheader"
+        v-if="activeServiceHome === 'no'"
+      >
+        Выберите тип вашего заведения, <br />
+        оно является специализированным или домашним?
+      </div>
+    </transition>
     <div class="business-registration__services" style="max-width: 372px">
       <div
         class="business-registration__service"
@@ -158,7 +165,12 @@
       </div>
     </div>
     <div class="business-registration__wrapper">
-      <div class="business-registration__field">
+      <div
+        class="business-registration__field"
+        :class="{
+          invalid: $v.adress.$dirty && !$v.adress.required,
+        }"
+      >
         <label
           for="business-registration__adress"
           class="business-registration__label"
@@ -166,12 +178,15 @@
         >
         <input
           type="text"
+          contextmenu="false"
           id="business-registration__adress"
+          name="busss"
           class="business-registration__input"
           v-model="adress"
           @input="activeModalWindowCity = true"
           @click="activeModalWindowCity = true"
           v-click-outside="hideActiveModalWindowCity"
+          autocomplete="off"
         />
         <transition name="fade">
           <div
@@ -208,23 +223,38 @@
         ></div>
       </div>
       <div class="business-registration__field-association">
-        <div class="business-registration__field">
+        <div
+          class="business-registration__field"
+          :class="{
+            invalid:
+              ($v.house.$dirty && !$v.house.required) ||
+              ($v.house.$dirty && this.house === 'Не определено'),
+          }"
+        >
           <label
-            for="business-registration__city"
+            for="business-registration__house"
             class="business-registration__label"
-            >Город:</label
+            >Дом:</label
           >
           <input
             type="text"
-            id="business-registration__city"
+            id="business-registration__house"
             class="business-registration__input"
-            v-model="city"
-            :class="{ 'business-registration__input_error': cityError }"
+            v-model="house"
             readonly
-            style="user-select: none"
+            autocomplete="off"
+            style="user-select: none; cursor: not-allowed"
           />
         </div>
-        <div class="business-registration__field">
+        <div
+          class="business-registration__field"
+          :class="{
+            invalid:
+              ($v.index.$dirty && !$v.index.required) ||
+              ($v.index.$dirty && !$v.index.minLength) ||
+              ($v.index.$dirty && !$v.index.maxLength),
+          }"
+        >
           <label
             for="business-registration__index"
             class="business-registration__label"
@@ -235,33 +265,36 @@
             id="business-registration__index"
             class="business-registration__input"
             v-model="index"
+            autocomplete="off"
           />
         </div>
       </div>
     </div>
-    <button
-      @click="$emit('change-slide', 4)"
-      class="business-registration__button"
-    >
-      Завершить регистрацию
+    <button type="submit" class="business-registration__button">
+      Продолжить регистрацию
     </button>
-  </div>
+  </form>
 </template>
 <script>
 import _ from "lodash";
 import { mapActions } from "vuex";
 import ClickOutside from "vue-click-outside";
+import { required, maxLength, minLength } from "vuelidate/lib/validators";
 export default {
   name: "BaseRegistrationForBusinessUserStepThree",
   data() {
     return {
       activeServiceHome: "no",
       adress: "",
-      city: "",
+      house: "",
       index: "",
       activeModalWindowCity: false,
-      cityError: false,
     };
+  },
+  validations: {
+    adress: { required },
+    house: { required },
+    index: { required, minLength: minLength(6), maxLength: maxLength(6) },
   },
   methods: {
     ...mapActions(["getCity"]),
@@ -270,31 +303,38 @@ export default {
     }, 200),
     selectSuggestion(suggestion) {
       this.adress = suggestion.value;
-      this.city = suggestion.data.city_with_type ?? "Не определено";
+      console.log(suggestion.value.split("д "));
+      this.house =
+        suggestion.value.split(" д ").length > 1
+          ? suggestion.value
+              .split("д ")
+              [suggestion.value.split(" д ").length - 1].replace(", ", " ")
+              .split(" ")[0]
+          : "Не определено" ?? "Не определено";
     },
     hideActiveModalWindowCity() {
       this.activeModalWindowCity = false;
     },
     clearCity() {
-      this.city = "";
+      this.house = "";
       this.adress = "";
+    },
+    submitHandler() {
+      if (this.$v.$invalid || this.activeServiceHome === "no") {
+        this.$v.$touch();
+        return;
+      }
+      const FormData = {
+        adress: this.adress,
+        house: this.house,
+        index: this.index,
+      };
+      this.$emit("change-slide", 4, FormData);
     },
   },
   watch: {
     adress(value) {
-      this.$localStorage.set("registrationAdress", value);
-      this.updatePossibleCity(value);
-    },
-    city(value) {
-      if (value === "Не определено") {
-        this.cityError = true;
-      } else {
-        this.cityError = false;
-      }
-      this.$localStorage.set("registrationCity", value);
-    },
-    index(value) {
-      this.$localStorage.set("registrationIndex", value);
+      this.getCity(value);
     },
   },
   directives: {
@@ -325,9 +365,7 @@ export default {
   &:hover
     &::before, &::after
       background-color: black
-.business-registration__input_error
-  border: 1px solid $palette-red !important
-  color: $palette-red !important
+
 .business-registration
   &__field
     position: relative
@@ -335,26 +373,27 @@ export default {
     font-size: 16px
     line-height: 18px
     text-align: center
-    color: #000145
+    color: $palette-red
     margin-bottom: 8px
   &__select
     max-height: 260px
     box-sizing: border-box
-    padding-left: 12px
-    border: 1px solid $palette-blue
-    border-top: 0
+    border-left: 1px solid $palette-blue
+    border-right: 1px solid $palette-blue
     position: absolute
     background: white
     z-index: 100
     width: 100%
+    text-align: left
     overflow: auto
     div
-      bottom-top: 1px solid $palette-blue
       cursor: pointer
       padding: 15px 0
       font-size: 14px
+      padding-left: 12px
       position: relative
       color: rgba(0,1,68, .9)
+      transition: 0.1s ease-in-out
       &::after
         content: ''
         width: calc(100% + 15px)
@@ -363,4 +402,6 @@ export default {
         bottom: 0
         left: -15px
         position: absolute
+      &:hover
+        background: rgba(0,0,0,.1)
 </style>
