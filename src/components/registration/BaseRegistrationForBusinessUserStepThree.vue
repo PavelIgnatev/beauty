@@ -11,6 +11,9 @@
       <div
         class="business-registration__subheader"
         v-if="activeServiceHome === 'no'"
+        :class="{
+          ivalidSubHeader: $v.adress.$dirty && activeServiceHome === 'no',
+        }"
       >
         Выберите тип вашего заведения, <br />
         оно является специализированным или домашним?
@@ -228,7 +231,7 @@
           :class="{
             invalid:
               ($v.house.$dirty && !$v.house.required) ||
-              ($v.house.$dirty && this.house === 'Не определено'),
+              ($v.house.$dirty && this.house === 'Не определён'),
           }"
         >
           <label
@@ -310,7 +313,7 @@ export default {
               .split("д ")
               [suggestion.value.split(" д ").length - 1].replace(", ", " ")
               .split(" ")[0]
-          : "Не определено" ?? "Не определено";
+          : "Не определён" ?? "Не определён";
     },
     hideActiveModalWindowCity() {
       this.activeModalWindowCity = false;
@@ -320,7 +323,11 @@ export default {
       this.adress = "";
     },
     submitHandler() {
-      if (this.$v.$invalid || this.activeServiceHome === "no") {
+      if (
+        this.$v.$invalid ||
+        this.activeServiceHome === "no" ||
+        this.house === "Не определён"
+      ) {
         this.$v.$touch();
         return;
       }
@@ -343,6 +350,8 @@ export default {
 };
 </script>
 <style lang="sass">
+.ivalidSubHeader
+  color: $palette-red !important
 .deskbar__select_exit
   position: absolute
   top: 42%
@@ -373,7 +382,7 @@ export default {
     font-size: 16px
     line-height: 18px
     text-align: center
-    color: $palette-red
+    color: $palette-blue
     margin-bottom: 8px
   &__select
     max-height: 260px

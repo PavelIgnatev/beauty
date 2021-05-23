@@ -449,7 +449,7 @@
           flagClass="flag-example"
           autocomplete="off"
           :readonly="activePassword ? false : true"
-          :style="activePassword ? '' : 'pointer-events: none'"
+          :style="activePassword ? '' : 'pointer-events: none;'"
         />
       </div>
       <div
