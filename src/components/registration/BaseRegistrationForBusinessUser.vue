@@ -40,7 +40,7 @@ export default {
   },
   data() {
     return {
-      slide: 1,
+      slide: 4,
       data: {},
     };
   },

@@ -7,7 +7,7 @@
     <div class="business-registration__step">Шаг регистрации 4 из 4</div>
     <div class="business-registration__subheader" style="color: #000144">
       Придумайте пароль для входа самостоятельно, <br />
-      или позвольте сделать это нам одиним нажатием кнопки мыши
+      или же позвольте сделать это нам
     </div>
     <div class="business-registration__services" style="max-width: 372px">
       <div
@@ -448,6 +448,8 @@
           inputClass="input-example"
           flagClass="flag-example"
           autocomplete="off"
+          :readonly="activePassword ? false : true"
+          :style="activePassword ? '' : 'pointer-events: none'"
         />
       </div>
       <div
@@ -469,82 +471,109 @@
           class="business-registration__input"
           v-model.trim="email"
           autocomplete="off"
+          :readonly="activePassword ? false : true"
+          :style="activePassword ? '' : 'pointer-events: none'"
         />
       </div>
-    </div>
-    <transition name="fade">
-      <div class="business-registration__wrapper" v-if="activePassword">
-        <div
-          class="business-registration__field"
-          :class="{
-            invalid:
-              ($v.password.$dirty && !$v.password.required) ||
-              ($v.password.$dirty && !$v.password.minLength),
-          }"
+      <div
+        class="business-registration__field"
+        :class="{
+          invalid:
+            ($v.password.$dirty && !$v.password.required) ||
+            ($v.password.$dirty && !$v.password.containsUppercase) ||
+            ($v.password.$dirty && !$v.password.containsLowercase) ||
+            ($v.password.$dirty && !$v.password.containsNumber) ||
+            ($v.password.$dirty && !$v.password.minLength),
+        }"
+      >
+        <label
+          for="business-registration__password"
+          class="business-registration__label"
+          >Пароль:</label
         >
-          <label
-            for="business-registration__password"
-            class="business-registration__label"
-            >Пароль:</label
-          >
-          <input
-            v-model.trim="password"
-            :type="!show ? 'password' : 'text'"
-            id="business-registration__password"
-            class="business-registration__input"
-            autocomplete="off"
+        <input
+          v-model.trim="password"
+          :type="!show && activePassword ? 'password' : 'text'"
+          id="business-registration__password"
+          class="business-registration__input"
+          autocomplete="off"
+          :readonly="activePassword ? false : true"
+          :style="activePassword ? '' : 'pointer-events: none'"
+        />
+        <div
+          class="show_and_hide"
+          v-if="activePassword"
+          :style="
+            ($v.password.$dirty && !$v.password.required) ||
+            ($v.password.$dirty && !$v.password.containsUppercase) ||
+            ($v.password.$dirty && !$v.password.containsLowercase) ||
+            ($v.password.$dirty && !$v.password.containsNumber) ||
+            ($v.password.$dirty && !$v.password.minLength)
+              ? 'top: 20%'
+              : ''
+          "
+        >
+          <img
+            src="../../assets/img/icons/show.svg"
+            @click="show = true"
+            v-if="!show"
+            alt=""
           />
-          <div class="show_and_hide">
-            <img
-              src="../../assets/img/icons/show.svg"
-              @click="show = true"
-              v-if="!show"
-              alt=""
-            />
-            <img
-              src="../../assets/img/icons/hide.svg"
-              @click="show = false"
-              v-if="show"
-              alt=""
-            />
-          </div>
-          <small
-            style="margin-top: 10px; text-align: left"
-            v-if="
-              ($v.password.$dirty && !$v.password.containsUppercase) ||
-              ($v.password.$dirty && !$v.password.containsLowercase) ||
-              ($v.password.$dirty && !$v.password.containsNumber)
-            "
-            >Ваш пароль должен быть длиной не менее 8-ми символов, содержать как
-            минимум одну цифру,а также иметь латинские буквы как в нижнем, так и
-            в верхнем регистре.</small
-          >
-        </div>
-        <div class="business-registration__field">
-          <label
-            for="business-registration__repeatpassword"
-            class="business-registration__label"
-            >Повторите пароль:</label
-          >
-          <input
-            v-model.trim="repeatPassword"
-            type="password"
-            id="business-registration__repeatpassword"
-            class="business-registration__input"
-            autocomplete="off"
+          <img
+            src="../../assets/img/icons/hide.svg"
+            @click="show = false"
+            v-if="show"
+            alt=""
           />
-          <small
-            style="margin-top: 10px; text-align: left"
-            v-if="
-              ($v.repeatPassword.$dirty && repeatPassword !== password) ||
-              ($v.repeatPassword.$dirty && this.repeatPassword === '') ||
-              ($v.repeatPassword.$dirty && this.password === '')
-            "
-            >Пароли должны совпадать</small
-          >
         </div>
+        <small
+          style="margin-top: 10px; text-align: left"
+          v-if="
+            ($v.password.$dirty && !$v.password.required) ||
+            ($v.password.$dirty && !$v.password.containsUppercase) ||
+            ($v.password.$dirty && !$v.password.containsLowercase) ||
+            ($v.password.$dirty && !$v.password.containsNumber) ||
+            ($v.password.$dirty && !$v.password.minLength)
+          "
+          >Ваш пароль должен быть длиной не менее 8-ми символов, содержать как
+          минимум одну цифру,а также иметь латинские буквы как в нижнем, так и в
+          верхнем регистре.</small
+        >
       </div>
-    </transition>
+      <div
+        class="business-registration__field"
+        :class="{
+          invalid:
+            ($v.repeatPassword.$dirty && !$v.repeatPassword.required) ||
+            ($v.repeatPassword.$dirty && repeatPassword !== password) ||
+            ($v.repeatPassword.$dirty && !$v.repeatPassword.minLength),
+        }"
+      >
+        <label
+          for="business-registration__repeatpassword"
+          class="business-registration__label"
+          >Повторите пароль:</label
+        >
+        <input
+          v-model.trim="repeatPassword"
+          :type="activePassword ? 'password' : 'text'"
+          id="business-registration__repeatpassword"
+          class="business-registration__input"
+          autocomplete="off"
+          :readonly="activePassword ? false : true"
+          :style="activePassword ? '' : 'pointer-events: none'"
+        />
+        <small
+          style="margin-top: 10px; text-align: left"
+          v-if="
+            ($v.repeatPassword.$dirty && !$v.repeatPassword.required) ||
+            ($v.repeatPassword.$dirty && repeatPassword !== password) ||
+            ($v.repeatPassword.$dirty && !$v.repeatPassword.minLength)
+          "
+          >Пароли должны совпадать</small
+        >
+      </div>
+    </div>
     <button type="submit" class="business-registration__button">
       Завершить регистрацию
     </button>
@@ -553,6 +582,7 @@
 <script>
 import { required, email, minLength } from "vuelidate/lib/validators";
 import PhoneMaskInput from "vue-phone-mask-input";
+import generator from "generate-password";
 export default {
   name: "BaseRegistrationForBusinessUserStepFour",
   data() {
@@ -561,19 +591,21 @@ export default {
       email: this.formData.email ?? "",
       password: "",
       repeatPassword: "",
-      activePassword: false,
+      activePassword: "",
       isValidByLibPhoneNumberJs: true,
       show: false,
     };
   },
-
+  mounted() {
+    this.activePassword = false;
+  },
   props: { formData: Object },
   validations: {
-    phone: { required },
+    phone: { required, minLength: minLength(10) },
     email: { required, email },
     password: {
       required,
-      minLength: minLength(6),
+      minLength: minLength(8),
       containsUppercase: function (value) {
         return /[A-Z]/.test(value);
       },
@@ -589,15 +621,11 @@ export default {
   methods: {
     submitHandler() {
       if (
-        (this.$v.$invalid ||
-          !this.isValidByLibPhoneNumberJs ||
-          this.repeatPassword !== this.password ||
-          this.repeatPassword === "" ||
-          this.password === "") &&
-        this.activePassword
+        this.$v.$invalid ||
+        this.repeatPassword !== this.password ||
+        !this.isValidByLibPhoneNumberJs
       ) {
         this.$v.$touch();
-        this.repeatPassword = "";
         return;
       }
 
@@ -606,13 +634,33 @@ export default {
         email: this.email,
         password: this.password,
       };
+
       this.$emit("change-slide", 5, FormData);
     },
     onValidate(e) {
       this.isValidByLibPhoneNumberJs = e.isValidByLibPhoneNumberJs;
     },
   },
-
+  watch: {
+    activePassword(v) {
+      if (v === false) {
+        let password = generator.generate({
+          length: 10,
+          numbers: true,
+          uppercase: true,
+          lowercase: true,
+          strict: true,
+        });
+        this.password = password;
+        this.repeatPassword = password;
+        this.phone = this.formData.phone ?? "";
+        this.email = this.formData.email ?? "";
+      } else {
+        this.password = "";
+        this.repeatPassword = "";
+      }
+    },
+  },
   components: { PhoneMaskInput },
 };
 </script>
