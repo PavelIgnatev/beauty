@@ -306,7 +306,6 @@ export default {
     }, 200),
     selectSuggestion(suggestion) {
       this.adress = suggestion.value;
-      console.log(suggestion.value.split("д "));
       this.house =
         suggestion.value.split(" д ").length > 1
           ? suggestion.value

@@ -429,56 +429,6 @@
         class="business-registration__field"
         :class="{
           invalid:
-            ($v.phone.$dirty && !$v.phone.required) ||
-            ($v.phone.$dirty && !isValidByLibPhoneNumberJs),
-        }"
-      >
-        <label
-          for="business-registration__phone"
-          class="business-registration__label"
-          >Номер телефона:</label
-        >
-        <phone-mask-input
-          v-model.trim="phone"
-          autoDetectCountry
-          showFlag
-          id="business-registration__phone"
-          @onValidate="onValidate"
-          wrapperClass="wrraper-example"
-          inputClass="input-example"
-          flagClass="flag-example"
-          autocomplete="off"
-          :readonly="activePassword ? false : true"
-          :style="activePassword ? '' : 'pointer-events: none;'"
-        />
-      </div>
-      <div
-        class="business-registration__field"
-        :class="{
-          invalid:
-            ($v.email.$dirty && !$v.email.required) ||
-            ($v.email.$dirty && !$v.email.email),
-        }"
-      >
-        <label
-          for="business-registration__mail_4"
-          class="business-registration__label"
-          >Электронная почта:</label
-        >
-        <input
-          type="text"
-          id="business-registration__mail_4"
-          class="business-registration__input"
-          v-model.trim="email"
-          autocomplete="off"
-          :readonly="activePassword ? false : true"
-          :style="activePassword ? '' : 'pointer-events: none'"
-        />
-      </div>
-      <div
-        class="business-registration__field"
-        :class="{
-          invalid:
             ($v.password.$dirty && !$v.password.required) ||
             ($v.password.$dirty && !$v.password.containsUppercase) ||
             ($v.password.$dirty && !$v.password.containsLowercase) ||
@@ -493,39 +443,13 @@
         >
         <input
           v-model.trim="password"
-          :type="!show && activePassword ? 'password' : 'text'"
+          type="text"
           id="business-registration__password"
           class="business-registration__input"
           autocomplete="off"
           :readonly="activePassword ? false : true"
           :style="activePassword ? '' : 'pointer-events: none'"
         />
-        <div
-          class="show_and_hide"
-          v-if="activePassword"
-          :style="
-            ($v.password.$dirty && !$v.password.required) ||
-            ($v.password.$dirty && !$v.password.containsUppercase) ||
-            ($v.password.$dirty && !$v.password.containsLowercase) ||
-            ($v.password.$dirty && !$v.password.containsNumber) ||
-            ($v.password.$dirty && !$v.password.minLength)
-              ? 'top: 20%'
-              : ''
-          "
-        >
-          <img
-            src="../../assets/img/icons/show.svg"
-            @click="show = true"
-            v-if="!show"
-            alt=""
-          />
-          <img
-            src="../../assets/img/icons/hide.svg"
-            @click="show = false"
-            v-if="show"
-            alt=""
-          />
-        </div>
         <small
           style="margin-top: 10px; text-align: left"
           v-if="
@@ -556,7 +480,7 @@
         >
         <input
           v-model.trim="repeatPassword"
-          :type="activePassword ? 'password' : 'text'"
+          type="text"
           id="business-registration__repeatpassword"
           class="business-registration__input"
           autocomplete="off"
@@ -580,20 +504,22 @@
   </form>
 </template>
 <script>
-import { required, email, minLength } from "vuelidate/lib/validators";
-import PhoneMaskInput from "vue-phone-mask-input";
+import { required, minLength } from "vuelidate/lib/validators";
 import generator from "generate-password";
 export default {
   name: "BaseRegistrationForBusinessUserStepFour",
   data() {
     return {
-      phone: this.formData.phone ?? "",
-      email: this.formData.email ?? "",
       password: "",
       repeatPassword: "",
       activePassword: "",
-      isValidByLibPhoneNumberJs: true,
-      show: false,
+      pass: generator.generate({
+        length: 10,
+        numbers: true,
+        uppercase: true,
+        lowercase: true,
+        strict: true,
+      }),
     };
   },
   mounted() {
@@ -601,8 +527,6 @@ export default {
   },
   props: { formData: Object },
   validations: {
-    phone: { required, minLength: minLength(10) },
-    email: { required, email },
     password: {
       required,
       minLength: minLength(8),
@@ -620,61 +544,30 @@ export default {
   },
   methods: {
     submitHandler() {
-      if (
-        this.$v.$invalid ||
-        this.repeatPassword !== this.password ||
-        !this.isValidByLibPhoneNumberJs
-      ) {
+      console.log(this.repeatPassword === this.password);
+      if (this.$v.$invalid || this.repeatPassword !== this.password) {
         this.$v.$touch();
         return;
       }
 
       const FormData = {
-        phone: this.phone,
-        email: this.email,
         password: this.password,
       };
-
+      console.log(FormData);
       this.$emit("change-slide", 5, FormData);
-    },
-    onValidate(e) {
-      this.isValidByLibPhoneNumberJs = e.isValidByLibPhoneNumberJs;
     },
   },
   watch: {
     activePassword(v) {
       if (v === false) {
-        let password = generator.generate({
-          length: 10,
-          numbers: true,
-          uppercase: true,
-          lowercase: true,
-          strict: true,
-        });
-        this.password = password;
-        this.repeatPassword = password;
-        this.phone = this.formData.phone ?? "";
-        this.email = this.formData.email ?? "";
+        this.password = this.pass;
+        this.repeatPassword = this.pass;
       } else {
         this.password = "";
         this.repeatPassword = "";
       }
     },
   },
-  components: { PhoneMaskInput },
 };
 </script>
-<style lang="sass">
-.business-registration__main-step
-  .show_and_hide
-    cursor: pointer
-    width: 30px
-    position: absolute
-    top: calc(50% - 4px)
-    right: 10px
-    user-select: none
-    img
-      user-select: none
-      display: block
-      width: 30px
-</style>
+<style lang="sass"></style>
